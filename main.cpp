@@ -19,7 +19,7 @@ void printData(vector <Studentas> &stud, int num);
 int main() {
     vector <Studentas> students;
     int stud_num;
-    cout << "Moksleiviu skaicius: " << endl;
+    cout << "Studentu skaicius:";
     cin >> stud_num;
     readData(students, stud_num);
     printData(students, stud_num);
@@ -30,18 +30,18 @@ void readData(vector <Studentas> &stud, int stud_num) {
     for(int i = 0; i < stud_num; i++) {
         Studentas stud_var;
         int hw;
-        cout << "Vardas: ";
+        cout << "Vardas:";
         cin >> stud_var.name;
-        cout << "Pavarde: ";
+        cout << "Pavarde:";
         cin >> stud_var.last_name;
         cout << "n: ";
         cin >> stud_var.n;
         for (int j = 0; j < stud_var.n; j++) {
-            cout << "Namu darbo nr. " << j + 1 << " rezultatas: ";
+            cout << "Namu darbo nr. " << j + 1 << " rezultatas:";
             cin >> hw;
             stud_var.hw_res.push_back(hw);
         };
-        cout << "Egzamino rezultatas: ";
+        cout << "Egzamino rezultatas:";
         cin >> stud_var.exam_res;
 
         stud_var.avg_hw = average(stud_var.hw_res);
