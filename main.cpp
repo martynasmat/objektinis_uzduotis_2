@@ -109,8 +109,8 @@ void printData(vector <Studentas> &stud, int num, bool use_median) {
     cout << left << setw(width) << galutinis << endl;
     cout << "------------------------------------------------------------" << endl;
     for(int i = 0; i < num; i++) {
-        cout << left << setw(width) << stud[i].name;
         cout << left << setw(width) << stud[i].last_name;
+        cout << left << setw(width) << stud[i].name;
         cout << left << setw(width) << fixed << setprecision(2) << stud[i].final_res << endl;
     };
 };
