@@ -11,8 +11,8 @@ using namespace std;
 struct Studentas {
     string name, last_name;
     vector <int> hw_res;
-    int exam_res, n;
-    float final_res, final_hw;
+    int exam_res;
+    float final_res = 0, final_hw = 0;
 };
 
 const int NAME_MAX_SYMBOLS = 20;
