@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <iomanip>
 
 using namespace std;
 
@@ -61,7 +62,7 @@ float average(vector <int> &res) {
     };
 
     if(vec_size > 0) {
-        return (float) sum / vec_size;
+        return (float) sum / (float) vec_size;
     }else {
         return 0.0;
     };
@@ -72,7 +73,13 @@ float final(float hw, int exam) {
 };
 
 void printData(vector <Studentas> &stud, int num) {
+    cout << left << setw(10) << "Pavarde";
+    cout << left << setw(10) << "Vardas";
+    cout << left << setw(10) << "Galutinis (vid.)" << endl;
+    cout << "--------------------------------------------------" << endl;
     for(int i = 0; i < num; i++) {
-        cout << stud[i].name << " " << stud[i].last_name << " " << stud[i].final_res << endl;
+        cout << left << setw(10) << stud[i].name;
+        cout << left << setw(10) << stud[i].last_name;
+        cout << left << setw(10) << stud[i].final_res << endl;
     };
 };
