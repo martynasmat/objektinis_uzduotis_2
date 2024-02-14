@@ -64,7 +64,6 @@ int main() {
         cin.clear();
         cin.ignore (std::numeric_limits<std::streamsize>::max(), '\n');
     };
-    cout << endl;
     readData(students, use_median);
     printData(students, students.size(), use_median);
     return 0;
@@ -99,8 +98,7 @@ bool valid_alphabet(string input) {
 void readData(vector <Studentas> &stud, bool use_median) {
     bool do_continue = false;
     bool do_continue_inner = false;
-    bool ivesta;
-    bool ivesta_inner = false;
+    bool ivesta, ivesta_inner;
     do{
         string response;
         Studentas stud_var;
