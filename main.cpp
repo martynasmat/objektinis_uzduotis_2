@@ -178,7 +178,7 @@ void readData(vector <Studentas> &stud, bool use_median) {
                 do_continue = true;
                 ivesta = true;
             }else {
-                cout << "Bloga ivestis, bandykite dar karta." << endl;
+                cout << "Bloga ivestis, bandykite dar karta." << endl << endl;
                 ivesta = false;
             };
         };
