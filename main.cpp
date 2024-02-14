@@ -30,25 +30,40 @@ bool valid_alphabet(string input);
 
 int main() {
     vector <Studentas> students;
-    bool use_median;
     bool ivesta = false;
+    int choice;
+
+    while(!ivesta) {
+        cout << "\n----- Pagrindinis meniu -----\n1 - vesti duomenis ranka;\n2 - generuoti pazymius;\n3 - generuoti visus duomenis;\n4 - baigti darba;\n\nIvesti pasirinkima:";
+        if(!(cin >> choice) or choice < 1 or choice > 4) {
+            cout << "Bloga ivestis, bandykite dar karta" << endl << endl;
+        }else {
+            if(choice < 1 or choice > 4) {
+                cout << "Bloga ivestis, galima ivesti tik nurodytus pasirinkimus" << endl << endl;
+            }else {
+                ivesta = true;
+            }
+        };
+        cin.clear();
+        cin.ignore (std::numeric_limits<std::streamsize>::max(), '\n');
+    };
+
+    bool use_median;
+    ivesta = false;
     while(!ivesta) {
         cout << "Naudoti vidurki ar mediana? (0 - vidurkis, 1 - mediana):";
         if(cin >> use_median) {
             if(use_median != 0 && use_median != 1) {
                 cout << "Bloga ivestis, galima ivesti tik 0 arba 1." << endl << endl;
-                cin.clear();
-                cin.ignore (std::numeric_limits<std::streamsize>::max(), '\n');
             }else {
                 ivesta = true;
             }
         }else {
             cout << "Bloga ivestis, bandykite dar karta" << endl << endl;
-            cin.clear();
-            cin.ignore (std::numeric_limits<std::streamsize>::max(), '\n');
         };
+        cin.clear();
+        cin.ignore (std::numeric_limits<std::streamsize>::max(), '\n');
     };
-    cin.ignore (std::numeric_limits<std::streamsize>::max(), '\n');
     cout << endl;
     readData(students, use_median);
     printData(students, students.size(), use_median);
