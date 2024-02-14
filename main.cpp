@@ -3,6 +3,7 @@
 #include <vector>
 #include <iomanip>
 #include <cmath>
+#include <algorithm>
 
 using namespace std;
 
@@ -43,11 +44,13 @@ void readData(vector <Studentas> &stud, int stud_num, bool use_median) {
         cin >> stud_var.last_name;
         cout << "n: ";
         cin >> stud_var.n;
+
         for (int j = 0; j < stud_var.n; j++) {
             cout << "Namu darbo nr. " << j + 1 << " rezultatas:";
             cin >> hw;
             stud_var.hw_res.push_back(hw);
         };
+        sort(stud_var.hw_res.begin(), stud_var.hw_res.end());
         cout << "Egzamino rezultatas:";
         cin >> stud_var.exam_res;
 
