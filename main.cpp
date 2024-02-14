@@ -31,14 +31,15 @@ bool valid_alphabet(string input);
 int main() {
     vector <Studentas> students;
     bool ivesta = false;
-    int choice;
+    bool use_median;
+    int menu_choice;
 
     while(!ivesta) {
         cout << "\n----- Pagrindinis meniu -----\n1 - vesti duomenis ranka;\n2 - generuoti pazymius;\n3 - generuoti visus duomenis;\n4 - baigti darba;\n\nIvesti pasirinkima:";
-        if(!(cin >> choice) or choice < 1 or choice > 4) {
+        if(!(cin >> menu_choice) or menu_choice < 1 or menu_choice > 4) {
             cout << "Bloga ivestis, bandykite dar karta" << endl << endl;
         }else {
-            if(choice < 1 or choice > 4) {
+            if(menu_choice < 1 or menu_choice > 4) {
                 cout << "Bloga ivestis, galima ivesti tik nurodytus pasirinkimus" << endl << endl;
             }else {
                 ivesta = true;
@@ -48,7 +49,6 @@ int main() {
         cin.ignore (std::numeric_limits<std::streamsize>::max(), '\n');
     };
 
-    bool use_median;
     ivesta = false;
     while(!ivesta) {
         cout << "Naudoti vidurki ar mediana? (0 - vidurkis, 1 - mediana):";
@@ -99,11 +99,10 @@ void readData(vector <Studentas> &stud, bool use_median) {
     bool do_continue = false;
     bool do_continue_inner = false;
     bool ivesta, ivesta_inner;
+    string response;
+    Studentas stud_var;
+    int hw;
     do{
-        string response;
-        Studentas stud_var;
-        int hw;
-
         ivesta = false;
         while(!ivesta) {
             cout << "Vardas (maks. 20 simboliu):";
