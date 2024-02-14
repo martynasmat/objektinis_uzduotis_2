@@ -113,7 +113,6 @@ void readData(vector <Studentas> &stud, bool use_median) {
             ivesta = false;
             cout << "Ivesti namu darbu rezultata? (y - taip, n - ne):";
             cin >> response;
-            cout << endl;
             while (!ivesta) {
                 if (response == "n") {
                     do_continue_inner = false;
