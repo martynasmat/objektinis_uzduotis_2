@@ -29,43 +29,52 @@ bool valid_mark(int input);
 bool valid_alphabet(string input);
 
 int main() {
-    vector <Studentas> students;
-    bool ivesta = false;
-    bool use_median;
-    int menu_choice;
+    while(true) {
+        vector<Studentas> students;
+        bool ivesta = false;
+        bool use_median;
+        int menu_choice;
 
-    while(!ivesta) {
-        cout << "\n----- Pagrindinis meniu -----\n1 - vesti duomenis ranka;\n2 - generuoti pazymius;\n3 - generuoti visus duomenis;\n4 - baigti darba;\n\nIvesti pasirinkima:";
-        if(!(cin >> menu_choice) or menu_choice < 1 or menu_choice > 4) {
-            cout << "Bloga ivestis, bandykite dar karta" << endl << endl;
-        }else {
-            if(menu_choice < 1 or menu_choice > 4) {
-                cout << "Bloga ivestis, galima ivesti tik nurodytus pasirinkimus" << endl << endl;
-            }else {
-                ivesta = true;
-            }
+        while (!ivesta) {
+            cout
+                    << "\n----- Pagrindinis meniu -----\n1 - vesti duomenis ranka;\n2 - generuoti pazymius;\n3 - generuoti visus duomenis;\n4 - baigti darba;\n\nIvesti pasirinkima:";
+            if (!(cin >> menu_choice)) {
+                cout << "Bloga ivestis, bandykite dar karta" << endl << endl;
+            } else {
+                if (menu_choice < 1 or menu_choice > 4) {
+                    cout << "Bloga ivestis, galima ivesti tik nurodytus pasirinkimus" << endl << endl;
+                } else if (menu_choice == 1){
+                    ivesta = true;
+                } else if (menu_choice == 2) {
+                    ivesta = true;
+                } else if (menu_choice == 3) {
+                    ivesta = true;
+                } else if (menu_choice == 4) {
+                    ivesta = true;
+                };
+            };
+            cin.clear();
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         };
-        cin.clear();
-        cin.ignore (std::numeric_limits<std::streamsize>::max(), '\n');
-    };
 
-    ivesta = false;
-    while(!ivesta) {
-        cout << "Naudoti vidurki ar mediana? (0 - vidurkis, 1 - mediana):";
-        if(cin >> use_median) {
-            if(use_median != 0 && use_median != 1) {
-                cout << "Bloga ivestis, galima ivesti tik 0 arba 1." << endl << endl;
-            }else {
-                ivesta = true;
-            }
-        }else {
-            cout << "Bloga ivestis, bandykite dar karta" << endl << endl;
+        ivesta = false;
+        while (!ivesta) {
+            cout << "Naudoti vidurki ar mediana? (0 - vidurkis, 1 - mediana):";
+            if (cin >> use_median) {
+                if (use_median != 0 && use_median != 1) {
+                    cout << "Bloga ivestis, galima ivesti tik 0 arba 1." << endl << endl;
+                } else {
+                    ivesta = true;
+                }
+            } else {
+                cout << "Bloga ivestis, bandykite dar karta" << endl << endl;
+            };
+            cin.clear();
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         };
-        cin.clear();
-        cin.ignore (std::numeric_limits<std::streamsize>::max(), '\n');
+        readData(students, use_median);
+        printData(students, students.size(), use_median);
     };
-    readData(students, use_median);
-    printData(students, students.size(), use_median);
     return 0;
 };
 
