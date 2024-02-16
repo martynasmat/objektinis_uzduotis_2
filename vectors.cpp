@@ -11,7 +11,7 @@ using namespace std;
 struct Studentas {
     string name, last_name;
     vector <int> hw_res;
-    int exam_res;
+    int exam_res = 0;
     float final_res = 0, final_hw = 0;
 };
 
