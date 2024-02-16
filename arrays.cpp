@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-#include <vector>
 #include <iomanip>
 #include <cmath>
 #include <algorithm>
@@ -8,35 +7,37 @@
 
 using namespace std;
 
-struct Studentas {
-    string name, last_name;
-    vector <int> hw_res;
-    int exam_res;
-    float final_res = 0, final_hw = 0;
-};
-
 const int NAME_MAX_SYMBOLS = 20;
 const int NAME_MIN_SYMBOLS = 2;
 const int MIN_MARK = 2;
 const int MAX_MARK = 10;
+const int ARR_SIZE = 100;
+
+struct Student {
+    string name, last_name;
+    int hw_res[ARR_SIZE];
+    int hw_count = 0;
+    int exam_res = 0;
+    float final_res = 0, final_hw = 0;
+};
 
 int generate_mark();
-void readData(vector <Studentas> &stud, bool use_median, bool gen_marks, bool gen_names);
-float average(vector <int> &res);
-float median(vector <int> &res);
+void readData(Student stud[], int& student_count, bool use_median, bool gen_marks, bool gen_names);
+float average(int res[], int count);
+float median(int res[], int count);
 float final(float hw, int exam);
-void printData(vector <Studentas> &stud, int num, bool use_median);
+void printData(Student stud[], int student_count, bool use_median);
 bool valid_mark(int input);
 bool valid_alphabet(string input);
 
 int main() {
     while(true) {
-        vector<Studentas> students;
+        Student students[ARR_SIZE];
         bool ivesta = false;
         bool generate_marks = false;
         bool generate_names = false;
         bool use_median;
-        int menu_choice;
+        int menu_choice, student_count = 0;
 
         while (!ivesta) {
             cout
@@ -78,8 +79,8 @@ int main() {
             cin.clear();
             cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         };
-        readData(students, use_median, generate_marks, generate_names);
-        printData(students, students.size(), use_median);
+        readData(students, student_count, use_median, generate_marks, generate_names);
+        printData(students, student_count, use_median);
     };
 };
 
@@ -113,12 +114,12 @@ bool valid_alphabet(string input) {
     };
 };
 
-void readData(vector <Studentas> &stud, bool use_median, bool gen_marks, bool gen_names) {
+void readData(Student stud[], int& student_count, bool use_median, bool gen_marks, bool gen_names) {
     bool do_continue = false;
     bool do_continue_inner = false;
     bool ivesta, ivesta_inner;
     string response;
-    Studentas stud_var;
+    Student stud_var;
     int hw, mark;
     do{
         ivesta = false;
@@ -140,43 +141,49 @@ void readData(vector <Studentas> &stud, bool use_median, bool gen_marks, bool ge
         };
 
         do {
-            ivesta = false;
-            cout << "Ivesti namu darbu rezultata? (y - taip, n - ne):";
-            cin >> response;
-            while (!ivesta) {
-                if (response == "n") {
-                    do_continue_inner = false;
-                    ivesta = true;
-                } else if (response == "y") {
-                    if (gen_marks) {
-                        mark = generate_mark();
-                        stud_var.hw_res.push_back(mark);
-                        cout << "Sugeneruotas pazymys: " << mark << endl;
+            if (stud_var.hw_count < ARR_SIZE) {
+                ivesta = false;
+                cout << "Ivesti namu darbu rezultata? (y - taip, n - ne):";
+                cin >> response;
+                while (!ivesta) {
+                    if (response == "n") {
+                        do_continue_inner = false;
                         ivesta = true;
-                        do_continue_inner = true;
-                    } else {
-                        ivesta = true;
-                        do_continue_inner = true;
-                        ivesta_inner = false;
-                        while (!ivesta_inner) {
-                            cout << "Namu darbo nr. " << stud_var.hw_res.size() + 1 << " rezultatas:";
-                            if (cin >> hw) {
-                                if (valid_mark(hw)) {
-                                    stud_var.hw_res.push_back(hw);
-                                    ivesta_inner = true;
+                    } else if (response == "y") {
+                        if (gen_marks) {
+                            mark = generate_mark();
+                            stud_var.hw_res[stud_var.hw_count] = mark;
+                            cout << "Sugeneruotas pazymys: " << mark << endl;
+                            ivesta = true;
+                            do_continue_inner = true;
+                        } else {
+                            ivesta = true;
+                            do_continue_inner = true;
+                            ivesta_inner = false;
+                            while (!ivesta_inner) {
+                                cout << "Namu darbo nr. " << stud_var.hw_count + 1 << " rezultatas:";
+                                if (cin >> hw) {
+                                    if (valid_mark(hw)) {
+                                        stud_var.hw_res[stud_var.hw_count] = hw;
+                                        ivesta_inner = true;
+                                    };
+                                } else {
+                                    cout << "Bloga ivestis, galima ivesti tik sveikuosius skaicius." << endl << endl;
                                 };
-                            } else {
-                                cout <<  "Bloga ivestis, galima ivesti tik sveikuosius skaicius." << endl << endl;
+                                cin.clear();
+                                cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                             };
-                            cin.clear();
-                            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                         };
+                        stud_var.hw_count++;
+                    } else {
+                        cout << "Bloga ivestis, bandykite dar karta." << endl << endl;
+                        ivesta = true;
+                        do_continue_inner = true;
                     };
-                } else {
-                    cout << "Bloga ivestis, bandykite dar karta." << endl << endl;
-                    ivesta = true;
-                    do_continue_inner = true;
                 };
+            } else {
+                do_continue_inner = false;
+                cout << "Ivestas maksimalus skaicius pazymiu (" << ARR_SIZE << ")" << endl;
             };
         }while(do_continue_inner);
 
@@ -201,56 +208,59 @@ void readData(vector <Studentas> &stud, bool use_median, bool gen_marks, bool ge
         };
 
         if(use_median) {
-            stud_var.final_hw = median(stud_var.hw_res);
+            stud_var.final_hw = median(stud_var.hw_res, stud_var.hw_count);
         }else {
-            stud_var.final_hw = average(stud_var.hw_res);
+            stud_var.final_hw = average(stud_var.hw_res, stud_var.hw_count);
         };
 
         stud_var.final_res = final(stud_var.final_hw, stud_var.exam_res);
-        stud.push_back(stud_var);
+        stud[student_count] = stud_var;
+        student_count++;
         cout << endl;
 
         ivesta = false;
         cout << endl;
-        while(!ivesta) {
-            cout << "Ivesti dar vieno studento duomenis? (y - taip, n - ne):";
-            cin >> response;
-            if (response == "n") {
-                do_continue = false;
-                ivesta = true;
-            }else if (response == "y") {
-                do_continue = true;
-                ivesta = true;
-            }else {
-                cout << "Bloga ivestis, bandykite dar karta." << endl << endl;
-                ivesta = false;
+        if (student_count < ARR_SIZE) {
+            while (!ivesta) {
+                cout << "Ivesti dar vieno studento duomenis? (y - taip, n - ne):";
+                cin >> response;
+                if (response == "n") {
+                    do_continue = false;
+                    ivesta = true;
+                } else if (response == "y") {
+                    do_continue = true;
+                    ivesta = true;
+                } else {
+                    cout << "Bloga ivestis, bandykite dar karta." << endl << endl;
+                    ivesta = false;
+                };
             };
+        } else {
+            cout << "Ivestas maksimalus skaicius studentu (" << ARR_SIZE << ")" << endl;
+            do_continue = false;
         };
         cin.ignore (std::numeric_limits<std::streamsize>::max(), '\n');
     }while(do_continue);
 };
 
-float average(vector <int> &res) {
-    int vec_size = res.size();
+float average(int res[], int count) {
     int sum = 0;
-    for(int i = 0; i < vec_size; i++) {
+    for(int i = 0; i < count; i++) {
         sum += res[i];
     };
 
-    if(vec_size > 0) {
-        return (float)sum / (float)vec_size;
+    if(count > 0) {
+        return (float)sum / (float)count;
     }else {
         return 0.0;
     };
 };
 
-float median(vector <int> &res) {
-    sort(res.begin(), res.end());
-    int vec_size = res.size();
-    int size_divided = ceil(vec_size / 2.0);
-    if(vec_size > 0) {
-        if (vec_size % 2 == 0) {
-            cout << (float)(res[size_divided - 1] + res[size_divided]) / 2.0 << endl;
+float median(int res[], int count) {
+    sort(res, res + count);
+    int size_divided = ceil(count / 2.0);
+    if(count > 0) {
+        if (count % 2 == 0) {
             return (float)(res[size_divided - 1] + res[size_divided]) / 2.0;
         } else {
 
@@ -262,11 +272,10 @@ float median(vector <int> &res) {
 };
 
 float final(float hw, int exam) {
-    cout << "hw" << hw << "ex" << exam << endl;
     return 0.4 * hw + 0.6 * exam;
 };
 
-void printData(vector <Studentas> &stud, int num, bool use_median) {
+void printData(Student stud[], int student_count, bool use_median) {
     string galutinis = use_median ? "Galutinis (med.)" : "Galutinis (vid.)";
     int width = 20;
     cout << left << setw(width) << "Pavarde";
@@ -274,7 +283,7 @@ void printData(vector <Studentas> &stud, int num, bool use_median) {
 
     cout << left << setw(width) << galutinis << endl;
     cout << "------------------------------------------------------------" << endl;
-    for(int i = 0; i < num; i++) {
+    for(int i = 0; i < student_count; i++) {
         cout << left << setw(width) << stud[i].last_name;
         cout << left << setw(width) << stud[i].name;
         cout << left << setw(width) << fixed << setprecision(2) << stud[i].final_res << endl;
