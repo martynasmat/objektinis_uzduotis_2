@@ -50,6 +50,7 @@ int main() {
                 } else if (menu_choice == 3) {
                     ivesta = true;
                 } else if (menu_choice == 4) {
+                    return 0;
                     ivesta = true;
                 };
             };
@@ -75,7 +76,6 @@ int main() {
         readData(students, use_median);
         printData(students, students.size(), use_median);
     };
-    return 0;
 };
 
 bool valid_mark(int input) {
