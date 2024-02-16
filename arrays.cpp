@@ -20,7 +20,8 @@ const int NAME_MIN_SYMBOLS = 2;
 const int MIN_MARK = 2;
 const int MAX_MARK = 10;
 
-void readData(vector <Studentas> &stud, bool use_median);
+int generate_mark();
+void readData(vector <Studentas> &stud, bool use_median, bool gen_marks, bool gen_names);
 float average(vector <int> &res);
 float median(vector <int> &res);
 float final(float hw, int exam);
@@ -32,6 +33,8 @@ int main() {
     while(true) {
         vector<Studentas> students;
         bool ivesta = false;
+        bool generate_marks = false;
+        bool generate_names = false;
         bool use_median;
         int menu_choice;
 
@@ -47,11 +50,13 @@ int main() {
                     ivesta = true;
                 } else if (menu_choice == 2) {
                     ivesta = true;
+                    generate_marks = true;
                 } else if (menu_choice == 3) {
                     ivesta = true;
+                    generate_marks = true;
+                    generate_names = true;
                 } else if (menu_choice == 4) {
                     return 0;
-                    ivesta = true;
                 };
             };
             cin.clear();
@@ -73,9 +78,13 @@ int main() {
             cin.clear();
             cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         };
-        readData(students, use_median);
+        readData(students, use_median, generate_marks, generate_names);
         printData(students, students.size(), use_median);
     };
+};
+
+int generate_mark() {
+    return rand() % 9 + 2;
 };
 
 bool valid_mark(int input) {
@@ -104,13 +113,13 @@ bool valid_alphabet(string input) {
     };
 };
 
-void readData(vector <Studentas> &stud, bool use_median) {
+void readData(vector <Studentas> &stud, bool use_median, bool gen_marks, bool gen_names) {
     bool do_continue = false;
     bool do_continue_inner = false;
     bool ivesta, ivesta_inner;
     string response;
     Studentas stud_var;
-    int hw;
+    int hw, mark;
     do{
         ivesta = false;
         while(!ivesta) {
@@ -139,21 +148,29 @@ void readData(vector <Studentas> &stud, bool use_median) {
                     do_continue_inner = false;
                     ivesta = true;
                 } else if (response == "y") {
-                    ivesta = true;
-                    do_continue_inner = true;
-                    ivesta_inner = false;
-                    while(!ivesta_inner) {
-                        cout << "Namu darbo nr. " << stud_var.hw_res.size() + 1 << " rezultatas:";
-                        if(cin >> hw) {
-                            if (valid_mark(hw)) {
-                                stud_var.hw_res.push_back(hw);
-                                ivesta_inner = true;
+                    if (gen_marks) {
+                        mark = generate_mark();
+                        stud_var.hw_res.push_back(mark);
+                        cout << "Sugeneruotas pazymys: " << mark << endl;
+                        ivesta = true;
+                        do_continue_inner = true;
+                    } else {
+                        ivesta = true;
+                        do_continue_inner = true;
+                        ivesta_inner = false;
+                        while (!ivesta_inner) {
+                            cout << "Namu darbo nr. " << stud_var.hw_res.size() + 1 << " rezultatas:";
+                            if (cin >> hw) {
+                                if (valid_mark(hw)) {
+                                    stud_var.hw_res.push_back(hw);
+                                    ivesta_inner = true;
+                                };
+                            } else {
+                                cout <<  "Bloga ivestis, galima ivesti tik sveikuosius skaicius." << endl << endl;
                             };
-                        }else {
-                            cout << "Bloga ivestis, galima ivesti tik sveikuosius skaicius." << endl << endl;
+                            cin.clear();
+                            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                         };
-                        cin.clear();
-                        cin.ignore (std::numeric_limits<std::streamsize>::max(), '\n');
                     };
                 } else {
                     cout << "Bloga ivestis, bandykite dar karta." << endl << endl;
@@ -164,17 +181,23 @@ void readData(vector <Studentas> &stud, bool use_median) {
         }while(do_continue_inner);
 
         ivesta = false;
-        while(!ivesta) {
-            cout << "Egzamino rezultatas:";
-            if(cin >> stud_var.exam_res) {
-                if(valid_mark(stud_var.exam_res)) {
-                    ivesta = true;
+        if (gen_marks) {
+            mark = generate_mark();
+            stud_var.exam_res = mark;
+            cout << "Sugeneruotas egzamino rezultatas: " << mark << endl << endl;
+        } else {
+            while (!ivesta) {
+                cout << "Egzamino rezultatas:";
+                if (cin >> stud_var.exam_res) {
+                    if (valid_mark(stud_var.exam_res)) {
+                        ivesta = true;
+                    };
+                } else {
+                    cout << "Bloga ivestis, galima ivesti tik sveikuosius skaicius." << endl << endl;
                 };
-            }else {
-                cout << "Bloga ivestis, galima ivesti tik sveikuosius skaicius." << endl << endl;
+                cin.clear();
+                cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             };
-            cin.clear();
-            cin.ignore (std::numeric_limits<std::streamsize>::max(), '\n');
         };
 
         if(use_median) {
@@ -239,6 +262,7 @@ float median(vector <int> &res) {
 };
 
 float final(float hw, int exam) {
+    cout << "hw" << hw << "ex" << exam << endl;
     return 0.4 * hw + 0.6 * exam;
 };
 
