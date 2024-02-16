@@ -248,12 +248,14 @@ float median(vector <int> &res) {
     sort(res.begin(), res.end());
     int vec_size = res.size();
     int size_divided = ceil(vec_size / 2.0);
+
+    // If there are no entries, median = 0.0
     if(vec_size > 0) {
         if (vec_size % 2 == 0) {
-            cout << (float)(res[size_divided - 1] + res[size_divided]) / 2.0 << endl;
+            // If number of entries is even, median is calculated by taking the average of the 2 middle numbers.
             return (float)(res[size_divided - 1] + res[size_divided]) / 2.0;
         } else {
-
+            // If number of entries is odd, median is the middle entry.
             return (float)res[size_divided - 1];
         };
     }else {
@@ -262,11 +264,13 @@ float median(vector <int> &res) {
 };
 
 float final(float hw, int exam) {
-    cout << "hw" << hw << "ex" << exam << endl;
+    // Final grade is calculated with the following formula:
+    // 0.4 * (average / median homework mark) + 0.6 * (exam mark)
     return 0.4 * hw + 0.6 * exam;
 };
 
 void printData(vector <Studentas> &stud, int num, bool use_median) {
+    // Different output for average and median
     string galutinis = use_median ? "Galutinis (med.)" : "Galutinis (vid.)";
     int width = 20;
     cout << left << setw(width) << "Pavarde";
