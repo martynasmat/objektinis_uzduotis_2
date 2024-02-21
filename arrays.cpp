@@ -12,6 +12,12 @@ const int NAME_MIN_SYMBOLS = 2;
 const int MIN_MARK = 2;
 const int MAX_MARK = 10;
 const int ARR_SIZE = 100;
+const int NAME_COUNT = 10;
+const string NAMES[NAME_COUNT] = {"Dominykas", "Lukas", "Matas", "Benas", "Augustas", "Martynas", "Jonas", "Ignas", "Emilis", "Adomas"};
+const string SURNAMES[NAME_COUNT] = {"Kazlauskas", "Petrauskas", "Jankauskas", "Butkus", "Paulauskas", "Vasiliauskas", "Baranauskas", "Urbonas", "Navickas", "Ramanauskas"};
+
+string generate_surname();
+string generate_name();
 
 struct Student {
     string name, last_name;
@@ -84,6 +90,14 @@ int main() {
     };
 };
 
+string generate_surname() {
+    return SURNAMES[rand() % (NAME_COUNT - 1)];
+};
+
+string generate_name() {
+    return NAMES[rand() % (NAME_COUNT - 1)];
+};
+
 int generate_mark() {
     return rand() % 9 + 2;
 };
@@ -123,23 +137,31 @@ void readData(Student stud[], int& student_count, bool use_median, bool gen_mark
     int hw, mark;
     do{
         ivesta = false;
-        while(!ivesta) {
-            cout << "Vardas (maks. 20 simboliu):";
-            getline(cin, stud_var.name);
-            if(valid_alphabet(stud_var.name)) {
-                ivesta = true;
+        if (gen_names) {
+            string name = generate_name();
+            string surname = generate_surname();
+            cout << "Sugeneruotas vardas: " << name << endl;
+            cout << "Sugeneruota pavarde: " << surname << endl;
+            stud_var.name = name;
+            stud_var.last_name = surname;
+        }else {
+            while (!ivesta) {
+                cout << "Vardas (maks. 20 simboliu):";
+                getline(cin, stud_var.name);
+                if (valid_alphabet(stud_var.name)) {
+                    ivesta = true;
+                };
+            };
+
+            ivesta = false;
+            while (!ivesta) {
+                cout << "Pavarde (maks. 20 simboliu):";
+                getline(cin, stud_var.last_name);
+                if (valid_alphabet(stud_var.last_name)) {
+                    ivesta = true;
+                };
             };
         };
-
-        ivesta = false;
-        while (!ivesta) {
-            cout << "Pavarde (maks. 20 simboliu):";
-            getline(cin, stud_var.last_name);
-            if(valid_alphabet(stud_var.last_name)) {
-                ivesta = true;
-            };
-        };
-
         do {
             if (stud_var.hw_count < ARR_SIZE) {
                 ivesta = false;

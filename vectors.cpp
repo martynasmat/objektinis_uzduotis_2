@@ -19,7 +19,12 @@ const int NAME_MAX_SYMBOLS = 20;
 const int NAME_MIN_SYMBOLS = 2;
 const int MIN_MARK = 2;
 const int MAX_MARK = 10;
+const int NAME_COUNT = 10;
+const vector <string> NAMES = {"Dominykas", "Lukas", "Matas", "Benas", "Augustas", "Martynas", "Jonas", "Ignas", "Emilis", "Adomas"};
+const vector <string> SURNAMES = {"Kazlauskas", "Petrauskas", "Jankauskas", "Butkus", "Paulauskas", "Vasiliauskas", "Baranauskas", "Urbonas", "Navickas", "Ramanauskas"};
 
+string generate_surname();
+string generate_name();
 int generate_mark();
 void readData(vector <Studentas> &stud, bool use_median, bool gen_marks, bool gen_names);
 float average(vector <int> &res);
@@ -55,6 +60,7 @@ int main() {
                     ivesta = true;
                     generate_marks = true;
                     generate_names = true;
+                    cout << generate_names << endl;
                 } else if (menu_choice == 4) {
                     return 0;
                 };
@@ -81,6 +87,14 @@ int main() {
         readData(students, use_median, generate_marks, generate_names);
         printData(students, students.size(), use_median);
     };
+};
+
+string generate_surname() {
+    return SURNAMES[rand() % (NAME_COUNT - 1)];
+};
+
+string generate_name() {
+    return NAMES[rand() % (NAME_COUNT - 1)];
 };
 
 int generate_mark() {
@@ -122,20 +136,29 @@ void readData(vector <Studentas> &stud, bool use_median, bool gen_marks, bool ge
     int hw, mark;
     do{
         ivesta = false;
-        while(!ivesta) {
-            cout << "Vardas (maks. 20 simboliu):";
-            getline(cin, stud_var.name);
-            if(valid_alphabet(stud_var.name)) {
-                ivesta = true;
+        if (gen_names) {
+            string name = generate_name();
+            string surname = generate_surname();
+            cout << "Sugeneruotas vardas: " << name << endl;
+            cout << "Sugeneruota pavarde: " << surname << endl;
+            stud_var.name = name;
+            stud_var.last_name = surname;
+        }else {
+            while (!ivesta) {
+                cout << "Vardas (maks. 20 simboliu):";
+                getline(cin, stud_var.name);
+                if (valid_alphabet(stud_var.name)) {
+                    ivesta = true;
+                };
             };
-        };
 
-        ivesta = false;
-        while (!ivesta) {
-            cout << "Pavarde (maks. 20 simboliu):";
-            getline(cin, stud_var.last_name);
-            if(valid_alphabet(stud_var.last_name)) {
-                ivesta = true;
+            ivesta = false;
+            while (!ivesta) {
+                cout << "Pavarde (maks. 20 simboliu):";
+                getline(cin, stud_var.last_name);
+                if (valid_alphabet(stud_var.last_name)) {
+                    ivesta = true;
+                };
             };
         };
 
