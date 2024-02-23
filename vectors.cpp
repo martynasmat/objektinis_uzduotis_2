@@ -5,14 +5,16 @@
 #include <cmath>
 #include <algorithm>
 #include <cctype>
+#include <fstream>
+#include <chrono>
 
 using namespace std;
 
-struct Studentas {
+struct Student {
     string name, last_name;
     vector <int> hw_res;
     int exam_res = 0;
-    float final_res = 0, final_hw = 0;
+    float final_res_avg = 0, final_res_med = 0, final_hw_avg = 0, final_hw_med = 0;
 };
 
 const int NAME_MAX_SYMBOLS = 20;
@@ -23,70 +25,164 @@ const int NAME_COUNT = 10;
 const vector <string> NAMES = {"Dominykas", "Lukas", "Matas", "Benas", "Augustas", "Martynas", "Jonas", "Ignas", "Emilis", "Adomas"};
 const vector <string> SURNAMES = {"Kazlauskas", "Petrauskas", "Jankauskas", "Butkus", "Paulauskas", "Vasiliauskas", "Baranauskas", "Urbonas", "Navickas", "Ramanauskas"};
 
+void read_data_from_file(string file_name, vector <Student> &stud, bool use_median);
 string generate_surname();
 string generate_name();
 int generate_mark();
-void readData(vector <Studentas> &stud, bool use_median, bool gen_marks, bool gen_names);
+void read_data_from_console(vector <Student> &stud, bool use_median, bool gen_marks, bool gen_names);
 float average(vector <int> &res);
 float median(vector <int> &res);
 float final(float hw, int exam);
-void printData(vector <Studentas> &stud, int num, bool use_median);
+void print_data_file(vector <Student> &stud, int num, bool use_median);
+void print_data_choice(vector <Student> &stud, int num, bool use_median);
 bool valid_mark(int input);
 bool valid_alphabet(string input);
+bool compare_name(const Student& first, const Student& second);
+bool compare_last_name(const Student& first, const Student& second);
+bool compare_avg(const Student& first, const Student& second);
+bool compare_med(const Student& first, const Student& second);
 
 int main() {
     while(true) {
-        vector<Studentas> students;
-        bool ivesta = false;
+        vector<Student> students;
+        bool entered = false;
         bool generate_marks = false;
         bool generate_names = false;
+        bool read_from_file = false;
         bool use_median;
         int menu_choice;
 
-        while (!ivesta) {
-            cout
-                    << "\n----- Pagrindinis meniu -----\n1 - vesti duomenis ranka;\n2 - generuoti pazymius;\n3 - generuoti visus duomenis;\n4 - baigti darba;\n\nIvesti pasirinkima:";
+        while (!entered) {
+            cout << "\n----- Pagrindinis meniu -----\n1 - vesti duomenis ranka;\n2 - skaityti duomenis is failo;\n3 - generuoti pazymius;\n4 - generuoti visus duomenis;\n5 - baigti darba;\n\nIvesti pasirinkima:";
             if (!(cin >> menu_choice)) {
                 cout << "Bloga ivestis, bandykite dar karta" << endl << endl;
             } else {
-                if (menu_choice < 1 or menu_choice > 4) {
-                    cout << "Bloga ivestis, galima ivesti tik nurodytus pasirinkimus" << endl << endl;
-                } else if (menu_choice == 1){
-                    ivesta = true;
-                } else if (menu_choice == 2) {
-                    ivesta = true;
-                    generate_marks = true;
-                } else if (menu_choice == 3) {
-                    ivesta = true;
-                    generate_marks = true;
-                    generate_names = true;
-                    cout << generate_names << endl;
-                } else if (menu_choice == 4) {
-                    return 0;
+                switch(menu_choice) {
+                    case 1:
+                        entered = true;
+                        break;
+                    case 2:
+                        entered = true;
+                        read_from_file = true;
+                        break;
+                    case 3:
+                        entered = true;
+                        generate_marks = true;
+                        break;
+                    case 4:
+                        entered = true;
+                        generate_marks = true;
+                        generate_names = true;
+                        break;
+                    case 5:
+                        return 0;
+                    default:
+                        cout << "Bloga ivestis, galima ivesti tik nurodytus pasirinkimus" << endl << endl;
+                        break;
                 };
             };
             cin.clear();
             cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         };
 
-        ivesta = false;
-        while (!ivesta) {
-            cout << "Naudoti vidurki ar mediana? (0 - vidurkis, 1 - mediana):";
-            if (cin >> use_median) {
-                if (use_median != 0 && use_median != 1) {
-                    cout << "Bloga ivestis, galima ivesti tik 0 arba 1." << endl << endl;
-                } else {
-                    ivesta = true;
-                }
-            } else {
+        string output_choice;
+        bool output_console = false;
+        entered = false;
+        while(!entered) {
+            cout << "Isvesti ekrane ar faile? (e - ekrane, f - faile):";
+            cin >> output_choice;
+            if (output_choice == "e") {
+                output_console = true;
+                entered = true;
+            }else if (output_choice == "f") {
+                output_console = false;
+                entered = true;
+            }else {
+                cout << "Bloga ivestis, bandykite dar karta." << endl << endl;
+                entered = false;
+            };
+        };
+
+        if (read_from_file) {
+            read_data_from_file("studentai1000000.txt", students, use_median);
+        }else {
+            read_data_from_console(students, use_median, generate_marks, generate_names);
+        };
+
+        entered = false;
+        int sort_choice;
+        while (!entered) {
+            cout << "\nRusiuoti pagal:\n1 - varda;\n2 - pavarde;\n3 - vidurki;\n4 - mediana;\n\nIvesti pasirinkima:";
+            if (!(cin >> sort_choice)) {
                 cout << "Bloga ivestis, bandykite dar karta" << endl << endl;
+            } else {
+                auto start = std::chrono::high_resolution_clock::now(); auto st = start;
+                switch(sort_choice) {
+                    case 1:
+                        sort(students.begin(), students.end(), compare_name);
+                        entered = true;
+                        break;
+                    case 2:
+                        sort(students.begin(), students.end(), compare_last_name);
+                        entered = true;
+                        break;
+                    case 3:
+                        sort(students.begin(), students.end(), compare_avg);
+                        entered = true;
+                        break;
+                    case 4:
+                        sort(students.begin(), students.end(), compare_med);
+                        entered = true;
+                        break;
+                    default:
+                        cout << "Bloga ivestis, galima ivesti tik nurodytus pasirinkimus" << endl << endl;
+                        break;
+                };
+                std::chrono::duration<double> diff = std::chrono::high_resolution_clock::now() - start;
+                cout << "Masyvo rusiavimas uztruko " << diff.count() << " s" << endl;
             };
             cin.clear();
             cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         };
-        readData(students, use_median, generate_marks, generate_names);
-        printData(students, students.size(), use_median);
+
+        if (output_console) {
+            entered = false;
+            while (!entered) {
+                cout << "Naudoti vidurki ar mediana? (0 - vidurkis, 1 - mediana):";
+                if (cin >> use_median) {
+                    if (use_median != 0 && use_median != 1) {
+                        cout << "Bloga ivestis, galima ivesti tik 0 arba 1." << endl << endl;
+                    } else {
+                        entered = true;
+                    }
+                } else {
+                    cout << "Bloga ivestis, bandykite dar karta" << endl << endl;
+                };
+                cin.clear();
+                cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            };
+
+            print_data_choice(students, students.size(), use_median);
+        }else {
+            print_data_file(students, students.size(), use_median);
+        };
     };
+};
+
+bool compare_name(const Student& first, const Student& second) {
+    return first.name > second.name;
+};
+
+bool compare_last_name(const Student& first, const Student& second) {
+    return first.last_name > second.last_name;
+};
+
+bool compare_avg(const Student& first, const Student& second) {
+    return first.final_res_avg > second.final_res_avg;
+};
+
+bool compare_med(const Student& first, const Student& second) {
+    return first.final_res_med > second.final_res_med;
 };
 
 string generate_surname() {
@@ -127,15 +223,55 @@ bool valid_alphabet(string input) {
     };
 };
 
-void readData(vector <Studentas> &stud, bool use_median, bool gen_marks, bool gen_names) {
+void read_data_from_file(string file_name, vector <Student> &stud, bool use_median) {
+    stringstream buffer;
+    int mark;
+    bool first_line = true;
+    // Read file
+    auto start = std::chrono::high_resolution_clock::now(); auto st = start;
+    ifstream file(file_name);
+    if (!file) {
+        cout << "Failo negalima atidaryti..." << endl;
+        exit(1);
+    };
+    while(!file.eof()) {
+        if(first_line) {
+            string line;
+            getline(file, line);
+            first_line = false;
+        }else {
+            Student student;
+            file >> student.name >> student.last_name;
+            do {
+                if(file.peek() == 32) {
+                    file >> student.exam_res;
+                    file.clear();
+                    file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                }else {
+                    file >> mark;
+                    student.hw_res.push_back(mark);
+                };
+            }while (file.peek() == 10);
+            student.final_res_avg = final(student.final_hw_avg, student.exam_res);
+            student.final_res_med = final(student.final_hw_med, student.exam_res);
+            stud.push_back(student);
+        };
+    };
+    file.close();
+
+    std::chrono::duration<double> diff = std::chrono::high_resolution_clock::now() - start;
+    cout << "Failo nuskaitymas uztruko " << diff.count() << "s" << endl;
+};
+
+void read_data_from_console(vector <Student> &stud, bool use_median, bool gen_marks, bool gen_names) {
     bool do_continue = false;
     bool do_continue_inner = false;
-    bool ivesta, ivesta_inner;
+    bool entered, entered_inner;
     string response;
-    Studentas stud_var;
+    Student stud_var;
     int hw, mark;
     do{
-        ivesta = false;
+        entered = false;
         if (gen_names) {
             string name = generate_name();
             string surname = generate_surname();
@@ -144,49 +280,49 @@ void readData(vector <Studentas> &stud, bool use_median, bool gen_marks, bool ge
             stud_var.name = name;
             stud_var.last_name = surname;
         }else {
-            while (!ivesta) {
+            while (!entered) {
                 cout << "Vardas (maks. 20 simboliu):";
                 getline(cin, stud_var.name);
                 if (valid_alphabet(stud_var.name)) {
-                    ivesta = true;
+                    entered = true;
                 };
             };
 
-            ivesta = false;
-            while (!ivesta) {
+            entered = false;
+            while (!entered) {
                 cout << "Pavarde (maks. 20 simboliu):";
                 getline(cin, stud_var.last_name);
                 if (valid_alphabet(stud_var.last_name)) {
-                    ivesta = true;
+                    entered = true;
                 };
             };
         };
 
         do {
-            ivesta = false;
+            entered = false;
             cout << "Ivesti namu darbu rezultata? (y - taip, n - ne):";
             cin >> response;
-            while (!ivesta) {
+            while (!entered) {
                 if (response == "n") {
                     do_continue_inner = false;
-                    ivesta = true;
+                    entered = true;
                 } else if (response == "y") {
                     if (gen_marks) {
                         mark = generate_mark();
                         stud_var.hw_res.push_back(mark);
                         cout << "Sugeneruotas pazymys: " << mark << endl;
-                        ivesta = true;
+                        entered = true;
                         do_continue_inner = true;
                     } else {
-                        ivesta = true;
+                        entered = true;
                         do_continue_inner = true;
-                        ivesta_inner = false;
-                        while (!ivesta_inner) {
+                        entered_inner = false;
+                        while (!entered_inner) {
                             cout << "Namu darbo nr. " << stud_var.hw_res.size() + 1 << " rezultatas:";
                             if (cin >> hw) {
                                 if (valid_mark(hw)) {
                                     stud_var.hw_res.push_back(hw);
-                                    ivesta_inner = true;
+                                    entered_inner = true;
                                 };
                             } else {
                                 cout <<  "Bloga ivestis, galima ivesti tik sveikuosius skaicius." << endl << endl;
@@ -197,23 +333,23 @@ void readData(vector <Studentas> &stud, bool use_median, bool gen_marks, bool ge
                     };
                 } else {
                     cout << "Bloga ivestis, bandykite dar karta." << endl << endl;
-                    ivesta = true;
+                    entered = true;
                     do_continue_inner = true;
                 };
             };
         }while(do_continue_inner);
 
-        ivesta = false;
+        entered = false;
         if (gen_marks) {
             mark = generate_mark();
             stud_var.exam_res = mark;
             cout << "Sugeneruotas egzamino rezultatas: " << mark << endl << endl;
         } else {
-            while (!ivesta) {
+            while (!entered) {
                 cout << "Egzamino rezultatas:";
                 if (cin >> stud_var.exam_res) {
                     if (valid_mark(stud_var.exam_res)) {
-                        ivesta = true;
+                        entered = true;
                     };
                 } else {
                     cout << "Bloga ivestis, galima ivesti tik sveikuosius skaicius." << endl << endl;
@@ -223,30 +359,28 @@ void readData(vector <Studentas> &stud, bool use_median, bool gen_marks, bool ge
             };
         };
 
-        if(use_median) {
-            stud_var.final_hw = median(stud_var.hw_res);
-        }else {
-            stud_var.final_hw = average(stud_var.hw_res);
-        };
+        stud_var.final_hw_med = median(stud_var.hw_res);
+        stud_var.final_hw_avg = average(stud_var.hw_res);
 
-        stud_var.final_res = final(stud_var.final_hw, stud_var.exam_res);
+        stud_var.final_res_avg = final(stud_var.final_hw_avg, stud_var.exam_res);
+        stud_var.final_res_med = final(stud_var.final_hw_med, stud_var.exam_res);
         stud.push_back(stud_var);
         cout << endl;
 
-        ivesta = false;
+        entered = false;
         cout << endl;
-        while(!ivesta) {
+        while(!entered) {
             cout << "Ivesti dar vieno studento duomenis? (y - taip, n - ne):";
             cin >> response;
             if (response == "n") {
                 do_continue = false;
-                ivesta = true;
+                entered = true;
             }else if (response == "y") {
                 do_continue = true;
-                ivesta = true;
+                entered = true;
             }else {
                 cout << "Bloga ivestis, bandykite dar karta." << endl << endl;
-                ivesta = false;
+                entered = false;
             };
         };
         cin.ignore (std::numeric_limits<std::streamsize>::max(), '\n');
@@ -292,7 +426,7 @@ float final(float hw, int exam) {
     return 0.4 * hw + 0.6 * exam;
 };
 
-void printData(vector <Studentas> &stud, int num, bool use_median) {
+void print_data_choice(vector <Student> &stud, int num, bool use_median) {
     // Different output for average and median
     string galutinis = use_median ? "Galutinis (med.)" : "Galutinis (vid.)";
     int width = 20;
@@ -304,6 +438,32 @@ void printData(vector <Studentas> &stud, int num, bool use_median) {
     for(int i = 0; i < num; i++) {
         cout << left << setw(width) << stud[i].last_name;
         cout << left << setw(width) << stud[i].name;
-        cout << left << setw(width) << fixed << setprecision(2) << stud[i].final_res << endl;
+        if(use_median) {
+            cout << left << setw(width) << fixed << setprecision(2) << stud[i].final_res_med << endl;
+        }else {
+            cout << left << setw(width) << fixed << setprecision(2) << stud[i].final_res_avg << endl;
+        };
     };
+};
+
+void print_data_file(vector <Student> &stud, int num, bool use_median) {
+    // Different output for average and median
+    auto start = std::chrono::high_resolution_clock::now(); auto st = start;
+    ofstream file("results.txt");
+    string galutinis = use_median ? "Galutinis (med.)" : "Galutinis (vid.)";
+    int width = 20;
+    file << left << setw(width) << "Pavarde";
+    file << left << setw(width) << "Vardas";
+    file << left << setw(width) << "Galutinis (med.)";
+    file << left << setw(width) << "Galutinis (vid.)" << endl;
+    file << "----------------------------------------------------------------------------------" << endl;
+    for(int i = 0; i < num; i++) {
+        file << left << setw(width) << stud[i].last_name;
+        file << left << setw(width) << stud[i].name;
+        file << left << setw(width) << fixed << setprecision(2) << stud[i].final_res_med;
+        file << left << setw(width) << fixed << setprecision(2) << stud[i].final_res_avg << endl;
+    };
+    file.close();
+    std::chrono::duration<double> diff = std::chrono::high_resolution_clock::now() - start;
+    cout << "Rasymas i faila uztruko " << diff.count() << " s" << endl;
 };
