@@ -109,7 +109,7 @@ int main() {
         };
 
         if (read_from_file) {
-            read_data_from_file("studentai1000000.txt", students, use_median);
+            read_data_from_file("studentai10001000.txt", students, use_median);
         }else {
             read_data_from_console(students, use_median, generate_marks, generate_names);
         };
@@ -249,38 +249,45 @@ void read_data_from_file(string file_name, vector <Student> &stud, bool use_medi
     bool first_line = true;
     // Read file
     auto start = std::chrono::high_resolution_clock::now(); auto st = start;
-    ifstream file(file_name);
-    if (!file) {
-        cout << "Failo negalima atidaryti..." << endl;
-        exit(1);
-    };
-    while(!file.eof()) {
-        if(first_line) {
-            string line;
-            getline(file, line);
-            first_line = false;
-        }else {
-            Student student;
-            file >> student.name >> student.last_name;
-            do {
-                if(file.peek() == 32) {
-                    file >> student.exam_res;
-                    file.clear();
-                    file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                }else {
-                    file >> mark;
-                    student.hw_res.push_back(mark);
-                };
-            }while (file.peek() == 10);
-            student.final_res_avg = final(student.final_hw_avg, student.exam_res);
-            student.final_res_med = final(student.final_hw_med, student.exam_res);
-            stud.push_back(student);
+    try {
+        ifstream file(file_name);
+        if (!file) {
+            throw(0);
         };
-    };
-    file.close();
+        while (!file.eof()) {
+            if (first_line) {
+                string line;
+                getline(file, line);
+                first_line = false;
+            } else {
+                Student student;
+                file >> student.name >> student.last_name;
+                do {
+                    if (file.peek() == 32) {
+                        file >> student.exam_res;
+                        file.clear();
+                        file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    } else {
+                        file >> mark;
+                        student.hw_res.push_back(mark);
+                    };
+                } while (file.peek() == 10);
+                student.final_res_avg = final(student.final_hw_avg, student.exam_res);
+                student.final_res_med = final(student.final_hw_med, student.exam_res);
+                stud.push_back(student);
+            };
+        };
+        file.close();
 
-    std::chrono::duration<double> diff = std::chrono::high_resolution_clock::now() - start;
-    cout << "Failo nuskaitymas uztruko " << diff.count() << "s" << endl;
+        std::chrono::duration<double> diff = std::chrono::high_resolution_clock::now() - start;
+        cout << "Failo nuskaitymas uztruko " << diff.count() << "s" << endl;
+    }
+    catch (int err_num) {
+        if (err_num == 0) {
+            cout << "Failo negalima atidaryti..." << endl;
+            exit(1);
+        }
+    }
 };
 
 void read_data_from_console(vector <Student> &stud, bool use_median, bool gen_marks, bool gen_names) {
