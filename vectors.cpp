@@ -91,13 +91,18 @@ int main() {
         while(!entered) {
             cout << "Isvesti ekrane ar faile? (e - ekrane, f - faile):";
             cin >> output_choice;
-            if (output_choice == "e") {
-                output_console = true;
-                entered = true;
-            }else if (output_choice == "f") {
-                output_console = false;
-                entered = true;
-            }else {
+            try {
+                if (output_choice == "e") {
+                    output_console = true;
+                    entered = true;
+                } else if (output_choice == "f") {
+                    output_console = false;
+                    entered = true;
+                } else {
+                    throw(0);
+                }
+            }
+            catch (...){
                 cout << "Bloga ivestis, bandykite dar karta." << endl << endl;
                 entered = false;
             };
@@ -198,27 +203,42 @@ int generate_mark() {
 };
 
 bool valid_mark(int input) {
-    if (input < MIN_MARK) {
-        cout << "Bloga ivestis, pazymys turi buti lygus arba didesnis nei 2." << endl << endl;
-        return false;
-    }else if (input > MAX_MARK) {
-        cout << "Bloga ivestis, pazymys turi buti lygus arba mazenis nei 10." << endl << endl;
-        return false;
+    try {
+        if (input < MIN_MARK) {
+            throw(0);
+        }else if(input > MAX_MARK) {
+            throw(1);
+        };
+        return true;
+    }
+    catch (int err_num) {
+        if (err_num == 0) {
+            cout << "Bloga ivestis, pazymys turi buti lygus arba didesnis nei 2." << endl << endl;
+            return false;
+        } else if (err_num == 1) {
+            cout << "Bloga ivestis, pazymys turi buti lygus arba mazenis nei 10." << endl << endl;
+            return false;
+        };
     };
-    return true;
 };
 
 bool valid_alphabet(string input) {
-    if (input.length() <= NAME_MAX_SYMBOLS && input.length() >= NAME_MIN_SYMBOLS) {
+    try {
+        if(input.length() > NAME_MAX_SYMBOLS || input.length() < NAME_MIN_SYMBOLS) {
+            throw(0);
+        };
         for (int i = 0; i < input.length(); i++) {
             if (!isalpha(input[i])) {
-                cout << "Bloga ivestis, galima ivesti tik raides." << endl << endl;
-                return false;
+                throw(1);
             };
         };
         return true;
-    }else {
-        cout << "Bloga ivestis, min. " << NAME_MIN_SYMBOLS << ", maks. " << NAME_MAX_SYMBOLS << " simboliu." << endl << endl;
+    }catch(int err_num) {
+        if (err_num == 0) {
+            cout << "Bloga ivestis, min. " << NAME_MIN_SYMBOLS << ", maks. " << NAME_MAX_SYMBOLS << " simboliu." << endl;
+        } else if (err_num == 1) {
+            cout << "Bloga ivestis, galima ivesti tik raides." << endl << endl;
+        };
         return false;
     };
 };
