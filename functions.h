@@ -36,7 +36,7 @@ string generate_name();
 int generate_mark();
 bool valid_mark(int input);
 bool valid_alphabet(string input);
-void read_data_from_file(string file_name, vector <Student> &stud, bool use_median);
+void read_data_from_file(const string& file_name, vector <Student> &stud);
 void read_data_from_console(vector <Student> &stud, bool use_median, bool gen_marks, bool gen_names);
 float average(vector <int> &res);
 float median(vector <int> &res);

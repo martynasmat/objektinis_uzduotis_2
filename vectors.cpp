@@ -1,11 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <iomanip>
-#include <cmath>
 #include <algorithm>
-#include <cctype>
-#include <fstream>
 #include <chrono>
 #include "functions.cpp"
 
@@ -18,8 +14,8 @@ int main() {
         bool generate_marks = false;
         bool generate_names = false;
         bool read_from_file = false;
-        bool use_median;
-        int menu_choice;
+        bool use_median = false;
+        int menu_choice = 5;
 
         while (!entered) {
             cout << "\n----- Pagrindinis meniu -----\n1 - vesti duomenis ranka;\n2 - skaityti duomenis is failo;\n3 - generuoti pazymius;\n4 - generuoti visus duomenis;\n5 - baigti darba;\n\nIvesti pasirinkima:";
@@ -48,11 +44,11 @@ int main() {
                     default:
                         cout << "Bloga ivestis, galima ivesti tik nurodytus pasirinkimus" << endl << endl;
                         break;
-                };
-            };
+                }
+            }
             cin.clear();
             cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        };
+        }
 
         string output_choice;
         bool output_console = false;
@@ -73,9 +69,8 @@ int main() {
             }
             catch (...){
                 cout << "Bloga ivestis, bandykite dar karta." << endl << endl;
-                entered = false;
-            };
-        };
+            }
+        }
         cin.clear();
         cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
@@ -83,7 +78,7 @@ int main() {
             read_data_from_file("studentai100000.txt", students, use_median);
         }else {
             read_data_from_console(students, use_median, generate_marks, generate_names);
-        };
+        }
 
         entered = false;
         int sort_choice;
@@ -113,13 +108,13 @@ int main() {
                     default:
                         cout << "Bloga ivestis, galima ivesti tik nurodytus pasirinkimus" << endl << endl;
                         break;
-                };
+                }
                 std::chrono::duration<double> diff = std::chrono::high_resolution_clock::now() - start;
                 cout << "Masyvo rusiavimas uztruko " << diff.count() << " s" << endl;
-            };
+            }
             cin.clear();
             cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        };
+        }
 
         if (output_console) {
             entered = false;
@@ -133,15 +128,15 @@ int main() {
                     }
                 } else {
                     cout << "Bloga ivestis, bandykite dar karta" << endl << endl;
-                };
+                }
                 cin.clear();
                 cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            };
+            }
 
             print_data_choice(students, students.size(), use_median);
         }else {
             print_data_file(students, students.size(), use_median);
-        };
-    };
-};
+        }
+    }
+}
 
