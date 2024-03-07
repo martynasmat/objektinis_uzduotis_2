@@ -17,8 +17,7 @@ int main() {
 
         main_menu(menu_choice, read_from_file, generate_marks, generate_names);
         output_menu(output_console);
-        cin.clear();
-        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        clear_stream();
 
         if (read_from_file) {
             read_data_from_file("studentai100000.txt", students);

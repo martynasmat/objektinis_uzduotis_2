@@ -11,6 +11,11 @@
 
 using namespace std;
 
+void clear_stream() {
+    cin.clear();
+    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+}
+
 void main_menu(int &menu_choice, bool &read_from_file, bool &generate_marks, bool &generate_names) {
     bool entered = false;
     while (!entered) {
@@ -42,8 +47,7 @@ void main_menu(int &menu_choice, bool &read_from_file, bool &generate_marks, boo
                     break;
             }
         }
-        cin.clear();
-        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        clear_stream();
     }
 }
 
@@ -83,8 +87,7 @@ void avg_median_menu(bool &use_median) {
         } else {
             cout << "Bloga ivestis, bandykite dar karta" << endl << endl;
         }
-        cin.clear();
-        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        clear_stream();
     }
 }
 
@@ -121,8 +124,7 @@ void sort_menu(vector <Student> &students) {
             std::chrono::duration<double> diff = std::chrono::high_resolution_clock::now() - start;
             cout << "Masyvo rusiavimas uztruko " << diff.count() << " s" << endl;
         }
-        cin.clear();
-        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        clear_stream();
     }
 }
 
@@ -305,8 +307,7 @@ void read_data_from_console(vector <Student> &stud, bool use_median, bool gen_ma
                             } else {
                                 cout <<  "Bloga ivestis, galima ivesti tik sveikuosius skaicius." << endl << endl;
                             }
-                            cin.clear();
-                            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                            clear_stream();
                         }
                     }
                 } else {
@@ -332,8 +333,7 @@ void read_data_from_console(vector <Student> &stud, bool use_median, bool gen_ma
                 } else {
                     cout << "Bloga ivestis, galima ivesti tik sveikuosius skaicius." << endl << endl;
                 }
-                cin.clear();
-                cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                clear_stream();
             }
         }
 
