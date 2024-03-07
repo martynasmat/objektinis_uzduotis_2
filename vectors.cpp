@@ -7,75 +7,82 @@
 
 using namespace std;
 
+void main_menu(bool &entered, int &menu_choice, bool &read_from_file, bool &generate_marks, bool &generate_names) {
+    while (!entered) {
+        cout << "\n----- Pagrindinis meniu -----\n1 - vesti duomenis ranka;\n2 - skaityti duomenis is failo;\n3 - generuoti pazymius;\n4 - generuoti visus duomenis;\n5 - baigti darba;\n\nIvesti pasirinkima:";
+        if (!(cin >> menu_choice)) {
+            cout << "Bloga ivestis, bandykite dar karta" << endl << endl;
+        } else {
+            switch(menu_choice) {
+                case 1:
+                    entered = true;
+                    break;
+                case 2:
+                    entered = true;
+                    read_from_file = true;
+                    break;
+                case 3:
+                    entered = true;
+                    generate_marks = true;
+                    break;
+                case 4:
+                    entered = true;
+                    generate_marks = true;
+                    generate_names = true;
+                    break;
+                case 5:
+                    exit(0);
+                default:
+                    cout << "Bloga ivestis, galima ivesti tik nurodytus pasirinkimus" << endl << endl;
+                    break;
+            }
+        }
+        cin.clear();
+        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    }
+}
+
+void output_menu(bool &entered, bool &output_console) {
+    string output_choice;
+    entered = false;
+    while(!entered) {
+        cout << "Isvesti ekrane ar faile? (e - ekrane, f - faile):";
+        cin >> output_choice;
+        try {
+            if (output_choice == "e") {
+                output_console = true;
+                entered = true;
+            } else if (output_choice == "f") {
+                output_console = false;
+                entered = true;
+            } else {
+                throw(0);
+            }
+        }
+        catch (...){
+            cout << "Bloga ivestis, bandykite dar karta." << endl << endl;
+        }
+    }
+}
+
 int main() {
     while(true) {
         vector<Student> students;
         bool entered = false;
+        bool output_console = false;
         bool generate_marks = false;
         bool generate_names = false;
         bool read_from_file = false;
         bool use_median = false;
         int menu_choice = 5;
 
-        while (!entered) {
-            cout << "\n----- Pagrindinis meniu -----\n1 - vesti duomenis ranka;\n2 - skaityti duomenis is failo;\n3 - generuoti pazymius;\n4 - generuoti visus duomenis;\n5 - baigti darba;\n\nIvesti pasirinkima:";
-            if (!(cin >> menu_choice)) {
-                cout << "Bloga ivestis, bandykite dar karta" << endl << endl;
-            } else {
-                switch(menu_choice) {
-                    case 1:
-                        entered = true;
-                        break;
-                    case 2:
-                        entered = true;
-                        read_from_file = true;
-                        break;
-                    case 3:
-                        entered = true;
-                        generate_marks = true;
-                        break;
-                    case 4:
-                        entered = true;
-                        generate_marks = true;
-                        generate_names = true;
-                        break;
-                    case 5:
-                        return 0;
-                    default:
-                        cout << "Bloga ivestis, galima ivesti tik nurodytus pasirinkimus" << endl << endl;
-                        break;
-                }
-            }
-            cin.clear();
-            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        }
-
-        string output_choice;
-        bool output_console = false;
-        entered = false;
-        while(!entered) {
-            cout << "Isvesti ekrane ar faile? (e - ekrane, f - faile):";
-            cin >> output_choice;
-            try {
-                if (output_choice == "e") {
-                    output_console = true;
-                    entered = true;
-                } else if (output_choice == "f") {
-                    output_console = false;
-                    entered = true;
-                } else {
-                    throw(0);
-                }
-            }
-            catch (...){
-                cout << "Bloga ivestis, bandykite dar karta." << endl << endl;
-            }
-        }
+        main_menu(entered, menu_choice, read_from_file, generate_marks, generate_names);
+        output_menu(entered, output_console);
         cin.clear();
         cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
         if (read_from_file) {
-            read_data_from_file("studentai100000.txt", students, use_median);
+            read_data_from_file("studentai100000.txt", students);
         }else {
             read_data_from_console(students, use_median, generate_marks, generate_names);
         }
