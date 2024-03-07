@@ -243,8 +243,7 @@ void read_data_from_file(const string& file_name, vector <Student> &stud) {
 }
 
 void read_data_from_console(vector <Student> &stud, bool use_median, bool gen_marks, bool gen_names) {
-    bool do_continue = false;
-    bool do_continue_inner = false;
+    bool do_continue, do_continue_inner;
     bool entered, entered_inner;
     string response;
     Student stud_var;
@@ -402,7 +401,7 @@ float median(vector <int> &res) {
 float final(float hw, int exam) {
     // Final grade is calculated with the following formula:
     // 0.4 * (average / median homework mark) + 0.6 * (exam mark)
-    return 0.4 * hw + 0.6 * exam;
+    return 0.4 * hw + 0.6 * (float)exam;
 }
 
 void print_data_choice(vector <Student> &stud, int num, bool use_median) {
