@@ -7,7 +7,8 @@
 
 using namespace std;
 
-void main_menu(bool &entered, int &menu_choice, bool &read_from_file, bool &generate_marks, bool &generate_names) {
+void main_menu(int &menu_choice, bool &read_from_file, bool &generate_marks, bool &generate_names) {
+    bool entered = false;
     while (!entered) {
         cout << "\n----- Pagrindinis meniu -----\n1 - vesti duomenis ranka;\n2 - skaityti duomenis is failo;\n3 - generuoti pazymius;\n4 - generuoti visus duomenis;\n5 - baigti darba;\n\nIvesti pasirinkima:";
         if (!(cin >> menu_choice)) {
@@ -42,9 +43,9 @@ void main_menu(bool &entered, int &menu_choice, bool &read_from_file, bool &gene
     }
 }
 
-void output_menu(bool &entered, bool &output_console) {
+void output_menu(bool &output_console) {
     string output_choice;
-    entered = false;
+    bool entered = false;
     while(!entered) {
         cout << "Isvesti ekrane ar faile? (e - ekrane, f - faile):";
         cin >> output_choice;
@@ -65,6 +66,44 @@ void output_menu(bool &entered, bool &output_console) {
     }
 }
 
+void sort_menu(vector <Student> &students) {
+    int sort_choice;
+    bool entered = false;
+    while (!entered) {
+        cout << "\nRusiuoti pagal:\n1 - varda;\n2 - pavarde;\n3 - vidurki;\n4 - mediana;\n\nIvesti pasirinkima:";
+        if (!(cin >> sort_choice)) {
+            cout << "Bloga ivestis, bandykite dar karta" << endl << endl;
+        } else {
+            auto start = std::chrono::high_resolution_clock::now(); auto st = start;
+            switch(sort_choice) {
+                case 1:
+                    sort(students.begin(), students.end(), compare_name);
+                    entered = true;
+                    break;
+                case 2:
+                    sort(students.begin(), students.end(), compare_last_name);
+                    entered = true;
+                    break;
+                case 3:
+                    sort(students.begin(), students.end(), compare_avg);
+                    entered = true;
+                    break;
+                case 4:
+                    sort(students.begin(), students.end(), compare_med);
+                    entered = true;
+                    break;
+                default:
+                    cout << "Bloga ivestis, galima ivesti tik nurodytus pasirinkimus" << endl << endl;
+                    break;
+            }
+            std::chrono::duration<double> diff = std::chrono::high_resolution_clock::now() - start;
+            cout << "Masyvo rusiavimas uztruko " << diff.count() << " s" << endl;
+        }
+        cin.clear();
+        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    }
+}
+
 int main() {
     while(true) {
         vector<Student> students;
@@ -76,8 +115,8 @@ int main() {
         bool use_median = false;
         int menu_choice = 5;
 
-        main_menu(entered, menu_choice, read_from_file, generate_marks, generate_names);
-        output_menu(entered, output_console);
+        main_menu(menu_choice, read_from_file, generate_marks, generate_names);
+        output_menu(output_console);
         cin.clear();
         cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
@@ -87,41 +126,7 @@ int main() {
             read_data_from_console(students, use_median, generate_marks, generate_names);
         }
 
-        entered = false;
-        int sort_choice;
-        while (!entered) {
-            cout << "\nRusiuoti pagal:\n1 - varda;\n2 - pavarde;\n3 - vidurki;\n4 - mediana;\n\nIvesti pasirinkima:";
-            if (!(cin >> sort_choice)) {
-                cout << "Bloga ivestis, bandykite dar karta" << endl << endl;
-            } else {
-                auto start = std::chrono::high_resolution_clock::now(); auto st = start;
-                switch(sort_choice) {
-                    case 1:
-                        sort(students.begin(), students.end(), compare_name);
-                        entered = true;
-                        break;
-                    case 2:
-                        sort(students.begin(), students.end(), compare_last_name);
-                        entered = true;
-                        break;
-                    case 3:
-                        sort(students.begin(), students.end(), compare_avg);
-                        entered = true;
-                        break;
-                    case 4:
-                        sort(students.begin(), students.end(), compare_med);
-                        entered = true;
-                        break;
-                    default:
-                        cout << "Bloga ivestis, galima ivesti tik nurodytus pasirinkimus" << endl << endl;
-                        break;
-                }
-                std::chrono::duration<double> diff = std::chrono::high_resolution_clock::now() - start;
-                cout << "Masyvo rusiavimas uztruko " << diff.count() << " s" << endl;
-            }
-            cin.clear();
-            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        }
+        sort_menu(students);
 
         if (output_console) {
             entered = false;
