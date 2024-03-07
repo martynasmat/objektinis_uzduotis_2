@@ -27,6 +27,10 @@ struct Student {
     float final_res_avg = 0, final_res_med = 0, final_hw_avg = 0, final_hw_med = 0;
 };
 
+void main_menu(int &menu_choice, bool &read_from_file, bool &generate_marks, bool &generate_names);
+void output_menu(bool &output_console);
+void avg_median_menu(bool &use_median);
+void sort_menu(vector <Student> &students);
 bool compare_name(const Student& first, const Student& second);
 bool compare_last_name(const Student& first, const Student& second);
 bool compare_avg(const Student& first, const Student& second);
