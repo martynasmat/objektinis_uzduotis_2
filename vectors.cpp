@@ -66,6 +66,24 @@ void output_menu(bool &output_console) {
     }
 }
 
+void avg_median_menu(bool &use_median) {
+    bool entered = false;
+    while (!entered) {
+        cout << "Naudoti vidurki ar mediana? (0 - vidurkis, 1 - mediana):";
+        if (cin >> use_median) {
+            if (use_median != 0 && use_median != 1) {
+                cout << "Bloga ivestis, galima ivesti tik 0 arba 1." << endl << endl;
+            } else {
+                entered = true;
+            }
+        } else {
+            cout << "Bloga ivestis, bandykite dar karta" << endl << endl;
+        }
+        cin.clear();
+        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    }
+}
+
 void sort_menu(vector <Student> &students) {
     int sort_choice;
     bool entered = false;
@@ -129,22 +147,7 @@ int main() {
         sort_menu(students);
 
         if (output_console) {
-            entered = false;
-            while (!entered) {
-                cout << "Naudoti vidurki ar mediana? (0 - vidurkis, 1 - mediana):";
-                if (cin >> use_median) {
-                    if (use_median != 0 && use_median != 1) {
-                        cout << "Bloga ivestis, galima ivesti tik 0 arba 1." << endl << endl;
-                    } else {
-                        entered = true;
-                    }
-                } else {
-                    cout << "Bloga ivestis, bandykite dar karta" << endl << endl;
-                }
-                cin.clear();
-                cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            }
-
+            avg_median_menu(use_median);
             print_data_choice(students, students.size(), use_median);
         }else {
             print_data_file(students, students.size(), use_median);
