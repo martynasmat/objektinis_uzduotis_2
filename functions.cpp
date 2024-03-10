@@ -16,10 +16,10 @@ void clear_stream() {
     cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
 
-void main_menu(int &menu_choice, bool &read_from_file, bool &generate_marks, bool &generate_names) {
+void main_menu(int &menu_choice, bool &read_from_file, bool &generate_marks, bool &generate_names, bool &generate_files) {
     bool entered = false;
     while (!entered) {
-        cout << "\n----- Pagrindinis meniu -----\n1 - vesti duomenis ranka;\n2 - skaityti duomenis is failo;\n3 - generuoti pazymius;\n4 - generuoti visus duomenis;\n5 - baigti darba;\n\nIvesti pasirinkima:";
+        cout << "\n----- Pagrindinis meniu -----\n1 - vesti duomenis ranka;\n2 - skaityti duomenis is failo;\n3 - generuoti pazymius;\n4 - generuoti visus duomenis;\n5 - generuoti faila;\n6 - baigti darba;\n\nIvesti pasirinkima:";
         if (!(cin >> menu_choice)) {
             cout << "Bloga ivestis, bandykite dar karta" << endl << endl;
         } else {
@@ -41,6 +41,9 @@ void main_menu(int &menu_choice, bool &read_from_file, bool &generate_marks, boo
                     generate_names = true;
                     break;
                 case 5:
+                    generate_files = true;
+                    break;
+                case 6:
                     exit(0);
                 default:
                     cout << "Bloga ivestis, galima ivesti tik nurodytus pasirinkimus" << endl << endl;
