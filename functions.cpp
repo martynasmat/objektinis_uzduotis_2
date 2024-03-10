@@ -11,22 +11,25 @@
 
 using namespace std;
 
-void generate_files() {
+void generate_file() {
+    cout << 'a' << endl;
     int student_num = 0, hw_num = 0, width = 20, width_hw = 10;
     string file_name;
     cin >> student_num;
     cin >> hw_num;
     cin >> file_name;
     ofstream file(file_name);
-    file << left << setw(width) << "Vardas" << "Pavarde";
+    file << left << setw(width) << "Vardas";
+    file << left << setw(width) << "Pavarde";
     for(int i = 0; i < hw_num; i++) {
-        file << left << setw(width_hw) << "ND" << i + 1;
+        file << left << setw(width_hw) << "ND" + to_string(i + 1);
     }
     file << left << setw(width_hw) << "Egz." << endl;
     for(int i = 0; i < student_num; i++) {
-        file << left << setw(width) << "Vardenis" << i + 1 << "Pavardenis" << i + 1;
+        file << left << setw(width) << "Vardenis" + to_string(i + 1);
+        file << left << setw(width) << "Pavardenis" + to_string(i + 1);
         for(int j = 0; j < hw_num; j++) {
-            file << left << setw(width_hw) << generate_mark() << j + 1;
+            file << left << setw(width_hw) << generate_mark();
         }
         file << left << setw(width_hw) << generate_mark() << endl;
     }
@@ -62,6 +65,7 @@ void main_menu(int &menu_choice, bool &read_from_file, bool &generate_marks, boo
                     generate_names = true;
                     break;
                 case 5:
+                    entered = true;
                     generate_files = true;
                     break;
                 case 6:
