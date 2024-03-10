@@ -15,10 +15,42 @@ void generate_file() {
     cout << 'a' << endl;
     int student_num = 0, hw_num = 0, width = 20, width_hw = 10;
     string file_name;
-    cin >> student_num;
-    cin >> hw_num;
-    cin >> file_name;
-    ofstream file(file_name);
+    bool entered = false;
+    ofstream file;
+    
+    while (!entered) {
+        cout << "Iveskite studentu skaiciu: ";
+        if (cin >> student_num) {
+            entered = true;
+        } else {
+            cout <<  "Bloga ivestis, galima ivesti tik sveikuosius skaicius." << endl << endl;
+        }
+        clear_stream();
+    }
+
+    entered = false;
+    while (!entered) {
+        cout << "Iveskite namu darbu pazymiu skaiciu: ";
+        if (cin >> hw_num) {
+            entered = true;
+        } else {
+            cout <<  "Bloga ivestis, galima ivesti tik sveikuosius skaicius." << endl << endl;
+        }
+        clear_stream();
+    }
+    
+    while(true) {
+        cout << "Iveskite failo pavadinima: ";
+        cin >> file_name;
+        
+        file = ofstream(file_name);
+        if(!file) {
+            cout << "Ivedete bloga failo pavadinima." << endl;   
+        }else {
+            break;
+        }
+    }
+    
     file << left << setw(width) << "Vardas";
     file << left << setw(width) << "Pavarde";
     for(int i = 0; i < hw_num; i++) {
