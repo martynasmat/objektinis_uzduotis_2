@@ -12,7 +12,6 @@
 using namespace std;
 
 void generate_file() {
-    cout << 'a' << endl;
     int student_num = 0, hw_num = 0, width = 20, width_hw = 10;
     string file_name;
     bool entered = false;
@@ -52,18 +51,18 @@ void generate_file() {
     }
     
     file << left << setw(width) << "Vardas";
-    file << left << setw(width) << "Pavarde";
+    file << right << setw(width) << "Pavarde";
     for(int i = 0; i < hw_num; i++) {
-        file << left << setw(width_hw) << "ND" + to_string(i + 1);
+        file << right << setw(width_hw) << "ND" + to_string(i + 1);
     }
-    file << left << setw(width_hw) << "Egz." << endl;
+    file << right << setw(width_hw) << "Egz.";
     for(int i = 0; i < student_num; i++) {
-        file << left << setw(width) << "Vardenis" + to_string(i + 1);
-        file << left << setw(width) << "Pavardenis" + to_string(i + 1);
+        file << endl << left << setw(width) << "Vardenis" + to_string(i + 1);
+        file << right << setw(width) << "Pavardenis" + to_string(i + 1);
         for(int j = 0; j < hw_num; j++) {
-            file << left << setw(width_hw) << generate_mark();
+            file << right << setw(width_hw) << generate_mark();
         }
-        file << left << setw(width_hw) << generate_mark() << endl;
+        file << right << setw(width_hw) << generate_mark();
     }
 }
 
@@ -276,16 +275,15 @@ void read_data_from_file(const string& file_name, vector <Student> &stud) {
             } else {
                 Student student;
                 file >> student.name >> student.last_name;
-                do {
-                    if (file.peek() == 32) {
-                        file >> student.exam_res;
-                        file.clear();
-                        file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                    } else {
-                        file >> mark;
-                        student.hw_res.push_back(mark);
-                    }
-                } while (file.peek() == 10);
+                while (file.peek() == 32) {
+                    file >> mark;
+                    student.hw_res.push_back(mark);
+                };
+
+                student.exam_res = student.hw_res.back();
+                student.hw_res.pop_back();
+                student.final_hw_avg = average(student.hw_res);
+                student.final_hw_med = median(student.hw_res);
                 student.final_res_avg = final(student.final_hw_avg, student.exam_res);
                 student.final_res_med = final(student.final_hw_med, student.exam_res);
                 stud.push_back(student);
@@ -461,6 +459,7 @@ float median(vector <int> &res) {
 float final(float hw, int exam) {
     // Final grade is calculated with the following formula:
     // 0.4 * (average / median homework mark) + 0.6 * (exam mark)
+    cout << hw << ' ' << exam << endl;
     return 0.4 * hw + 0.6 * (float)exam;
 }
 
