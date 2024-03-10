@@ -25,7 +25,7 @@ int main() {
             generate_file();
         } else {
             if (read_from_file) {
-                read_data_from_file("studentaitest.txt", students);
+                read_data_from_file("studentai100000.txt", students);
             } else {
                 read_data_from_console(students, use_median, generate_marks, generate_names);
             }

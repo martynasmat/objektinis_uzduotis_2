@@ -459,7 +459,6 @@ float median(vector <int> &res) {
 float final(float hw, int exam) {
     // Final grade is calculated with the following formula:
     // 0.4 * (average / median homework mark) + 0.6 * (exam mark)
-    cout << hw << ' ' << exam << endl;
     return 0.4 * hw + 0.6 * (float)exam;
 }
 
