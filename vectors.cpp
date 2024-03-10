@@ -12,16 +12,16 @@ int main() {
         bool generate_marks = false;
         bool generate_names = false;
         bool read_from_file = false;
-        bool generate_files = false;
+        bool generate_file_var = false;
         bool use_median = false;
         int menu_choice = 5;
 
-        main_menu(menu_choice, read_from_file, generate_marks, generate_names, generate_files);
+        main_menu(menu_choice, read_from_file, generate_marks, generate_names, generate_file_var);
         output_menu(output_console);
         clear_stream();
 
-        if (generate_files) {
-            continue;
+        if (generate_file_var) {
+            generate_file();
         } else {
             if (read_from_file) {
                 read_data_from_file("studentai100000.txt", students);
