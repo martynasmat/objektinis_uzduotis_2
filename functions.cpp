@@ -64,6 +64,7 @@ void generate_file() {
         }
         file << right << setw(width_hw) << generate_mark();
     }
+    file.close();
 }
 
 void clear_stream() {

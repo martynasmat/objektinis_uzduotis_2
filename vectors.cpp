@@ -25,6 +25,19 @@ int main() {
             generate_file();
         } else {
             if (read_from_file) {
+                string file_name;
+                while(true) {
+                    cout << "Iveskite failo pavadinima: ";
+                    cin >> file_name;
+
+                    ofstream file(file_name);
+                    if(!file) {
+                        cout << "Ivedete bloga failo pavadinima." << endl;
+                    }else {
+                        file.close();
+                        break;
+                    }
+                }
                 read_data_from_file("studentai100000.txt", students);
             } else {
                 read_data_from_console(students, use_median, generate_marks, generate_names);
