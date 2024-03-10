@@ -20,6 +20,7 @@ int main() {
         output_menu(output_console);
         clear_stream();
 
+        srand(time(nullptr));
         if (generate_file_var) {
             generate_file();
         } else {
