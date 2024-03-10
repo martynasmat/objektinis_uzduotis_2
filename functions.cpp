@@ -205,11 +205,11 @@ bool compare_med(const Student& first, const Student& second) {
 }
 
 string generate_surname() {
-    return SURNAMES[rand() % (NAME_COUNT - 1)];
+    return SURNAMES.at(rand() % (NAME_COUNT - 1));
 }
 
 string generate_name() {
-    return NAMES[rand() % (NAME_COUNT - 1)];
+    return NAMES.at(rand() % (NAME_COUNT - 1));
 }
 
 int generate_mark() {
@@ -428,7 +428,7 @@ float average(vector <int> &res) {
     int vec_size = res.size();
     int sum = 0;
     for(int i = 0; i < vec_size; i++) {
-        sum += res[i];
+        sum += res.at(i);
     }
 
     if(vec_size > 0) {
@@ -447,10 +447,10 @@ float median(vector <int> &res) {
     if(vec_size > 0) {
         if (vec_size % 2 == 0) {
             // If number of entries is even, median is calculated by taking the average of the 2 middle numbers.
-            return (float)(res[size_divided - 1] + res[size_divided]) / 2.0;
+            return (float)(res.at(size_divided - 1) + res.at(size_divided)) / 2.0;
         } else {
             // If number of entries is odd, median is the middle entry.
-            return (float)res[size_divided - 1];
+            return (float)res.at(size_divided - 1);
         }
     }else {
         return 0.0;
@@ -473,12 +473,12 @@ void print_data_choice(vector <Student> &stud, int num, bool use_median) {
     cout << left << setw(width) << galutinis << endl;
     cout << "------------------------------------------------------------" << endl;
     for(int i = 0; i < num; i++) {
-        cout << left << setw(width) << stud[i].last_name;
-        cout << left << setw(width) << stud[i].name;
+        cout << left << setw(width) << stud.at(i).last_name;
+        cout << left << setw(width) << stud.at(i).name;
         if(use_median) {
-            cout << left << setw(width) << fixed << setprecision(2) << stud[i].final_res_med << endl;
+            cout << left << setw(width) << fixed << setprecision(2) << stud.at(i).final_res_med << endl;
         }else {
-            cout << left << setw(width) << fixed << setprecision(2) << stud[i].final_res_avg << endl;
+            cout << left << setw(width) << fixed << setprecision(2) << stud.at(i).final_res_avg << endl;
         }
     }
 }
@@ -495,10 +495,10 @@ void print_data_file(vector <Student> &stud, int num, bool use_median) {
     file << left << setw(width) << "Galutinis (vid.)" << endl;
     file << "----------------------------------------------------------------------------------" << endl;
     for(int i = 0; i < num; i++) {
-        file << left << setw(width) << stud[i].last_name;
-        file << left << setw(width) << stud[i].name;
-        file << left << setw(width) << fixed << setprecision(2) << stud[i].final_res_med;
-        file << left << setw(width) << fixed << setprecision(2) << stud[i].final_res_avg << endl;
+        file << left << setw(width) << stud.at(i).last_name;
+        file << left << setw(width) << stud.at(i).name;
+        file << left << setw(width) << fixed << setprecision(2) << stud.at(i).final_res_med;
+        file << left << setw(width) << fixed << setprecision(2) << stud.at(i).final_res_avg << endl;
     }
     file.close();
     std::chrono::duration<double> diff = std::chrono::high_resolution_clock::now() - start;
