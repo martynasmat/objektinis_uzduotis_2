@@ -7,7 +7,7 @@ using namespace std;
 
 void sort_students(vector<Student> &stud, vector<Student> &rimciausi, vector<Student> &sukriteliai) {
     for(int i = 0; i < stud.size(); i++) {
-        if(stud.at(i).final_hw_med >= 5) {
+        if(stud.at(i).final_res_med >= 5) {
             rimciausi.push_back(stud.at(i));
             stud.erase(stud.begin() + i);
         }else {
@@ -36,30 +36,21 @@ int main() {
             generate_file();
         } else {
             if (read_from_file) {
-                string file_name;
-                while(true) {
-                    cout << "Iveskite failo pavadinima: ";
-                    cin >> file_name;
-
-                    ofstream file(file_name);
-                    if(!file) {
-                        cout << "Ivedete bloga failo pavadinima." << endl;
-                    }else {
-                        file.close();
-                        break;
-                    }
-                }
-                read_data_from_file("studentai100000.txt", students);
+                read_data_from_file("testinis.txt", students);
             } else {
                 read_data_from_console(students, use_median, generate_marks, generate_names);
             }
-            sort_students(students, rimciausi, sukriteliai);
             sort_menu(students);
+            sort_students(students, rimciausi, sukriteliai);
             if (output_console) {
                 avg_median_menu(use_median);
-                print_data_choice(students, students.size(), use_median);
+                cout << "Sukriteliai (galutinis balas < 5)" << endl;
+                print_data_choice(sukriteliai, sukriteliai.size(), use_median);
+                cout << "Rimciausi (galutinis balas >= 5)" << endl;
+                print_data_choice(rimciausi, rimciausi.size(), use_median);
             } else {
-                print_data_file(students, students.size(), use_median);
+                print_data_file(sukriteliai, sukriteliai.size(), use_median, "sukriteliai.txt");
+                print_data_file(rimciausi, rimciausi.size(), use_median, "rimciausi.txt");
             }
         }
     }

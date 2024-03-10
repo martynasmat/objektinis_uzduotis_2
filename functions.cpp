@@ -483,10 +483,10 @@ void print_data_choice(vector <Student> &stud, int num, bool use_median) {
     }
 }
 
-void print_data_file(vector <Student> &stud, int num, bool use_median) {
+void print_data_file(vector <Student> &stud, int num, bool use_median, string filename) {
     // Different output for average and median
     auto start = std::chrono::high_resolution_clock::now(); auto st = start;
-    ofstream file("results.txt");
+    ofstream file(filename);
     string galutinis = use_median ? "Galutinis (med.)" : "Galutinis (vid.)";
     int width = 20;
     file << left << setw(width) << "Pavarde";
