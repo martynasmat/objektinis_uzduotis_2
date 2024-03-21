@@ -5,21 +5,28 @@
 
 using namespace std;
 
-void sort_students(vector<Student> &stud, vector<Student> &rimciausi, vector<Student> &sukriteliai) {
-    for(int i = 0; i < stud.size(); i++) {
-        if(stud.at(i).final_res_med >= 5) {
-            rimciausi.push_back(stud.at(i));
-            stud.erase(stud.begin() + i);
-        }else {
-            sukriteliai.push_back(stud.at(i));
-            stud.erase(stud.begin() + i);
+void sort_students(vector<Student> &stud, vector<Student> &susikaupe, vector<Student> &vargseliai) {
+    auto start = std::chrono::high_resolution_clock::now();
+    for (int i = 0; i < stud.size(); ++i) {
+        if (stud.at(i).final_res_med >= 5) {
+            std::swap(stud[i], stud.back());
+            susikaupe.push_back(std::move(stud.at(i)));
+            stud.pop_back();
+            --i;
+        } else {
+            std::swap(stud[i], stud.back());
+            vargseliai.push_back(std::move(stud.back()));
+            stud.pop_back();
+            --i;
         }
     }
+    std::chrono::duration<double> diff = std::chrono::high_resolution_clock::now() - start;
+    std::cout << "Studentu rusiavimas uztruko " << diff.count() << " s" << std::endl;
 }
 
 int main() {
     while(true) {
-        vector<Student> students, rimciausi, sukriteliai;
+        vector<Student> students, susikaupe, vargseliai;
         bool output_console = false;
         bool generate_marks = false;
         bool generate_names = false;
@@ -41,16 +48,16 @@ int main() {
                 read_data_from_console(students, use_median, generate_marks, generate_names);
             }
             sort_menu(students);
-            sort_students(students, rimciausi, sukriteliai);
+            sort_students(students, susikaupe, vargseliai);
             if (output_console) {
                 avg_median_menu(use_median);
-                cout << "Sukriteliai (galutinis balas < 5)" << endl;
-                print_data_choice(sukriteliai, sukriteliai.size(), use_median);
-                cout << "Rimciausi (galutinis balas >= 5)" << endl;
-                print_data_choice(rimciausi, rimciausi.size(), use_median);
+                cout << "Vargseliai (galutinis balas < 5)" << endl;
+                print_data_choice(vargseliai, vargseliai.size(), use_median);
+                cout << "Susikaupe (galutinis balas >= 5)" << endl;
+                print_data_choice(susikaupe, susikaupe.size(), use_median);
             } else {
-                print_data_file(sukriteliai, sukriteliai.size(), use_median, "sukriteliai.txt");
-                print_data_file(rimciausi, rimciausi.size(), use_median, "rimciausi.txt");
+                print_data_file(vargseliai, vargseliai.size(), use_median, "vargseliai.txt");
+                print_data_file(susikaupe, susikaupe.size(), use_median, "susikaupe.txt");
             }
         }
     }

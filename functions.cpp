@@ -502,5 +502,5 @@ void print_data_file(vector <Student> &stud, int num, bool use_median, string fi
     }
     file.close();
     std::chrono::duration<double> diff = std::chrono::high_resolution_clock::now() - start;
-    cout << "Rasymas i faila uztruko " << diff.count() << " s" << endl;
+    cout << "Rasymas i faila " << filename << " uztruko " << diff.count() << " s" << endl;
 }
