@@ -27,6 +27,7 @@ struct Student {
     float final_res_avg = 0, final_res_med = 0, final_hw_avg = 0, final_hw_med = 0;
 };
 
+void sort_students(vector<Student> &stud, vector<Student> &susikaupe, vector<Student> &vargseliai);
 void generate_file();
 void clear_stream();
 void main_menu(int &menu_choice, bool &read_from_file, bool &generate_marks, bool &generate_names);

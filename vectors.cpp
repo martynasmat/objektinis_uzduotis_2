@@ -5,25 +5,6 @@
 
 using namespace std;
 
-void sort_students(vector<Student> &stud, vector<Student> &susikaupe, vector<Student> &vargseliai) {
-    auto start = std::chrono::high_resolution_clock::now();
-    for (int i = 0; i < stud.size(); i++) {
-        if (stud.at(i).final_res_med >= 5) {
-            std::swap(stud.at(i), stud.back());
-            susikaupe.push_back(std::move(stud.back()));
-            stud.pop_back();
-            i--;
-        } else {
-            std::swap(stud.at(i), stud.back());
-            vargseliai.push_back(std::move(stud.back()));
-            stud.pop_back();
-            i--;
-        }
-    }
-    std::chrono::duration<double> diff = std::chrono::high_resolution_clock::now() - start;
-    std::cout << "Studentu rusiavimas uztruko " << diff.count() << " s" << std::endl;
-}
-
 int main() {
     while(true) {
         vector<Student> students, susikaupe, vargseliai;
@@ -41,7 +22,7 @@ int main() {
             generate_file();
         } else {
             if (read_from_file) {
-                read_data_from_file("testinis.txt", students);
+                read_data_from_file("studentai1000.txt", students);
             } else {
                 read_data_from_console(students, use_median, generate_marks, generate_names);
             }

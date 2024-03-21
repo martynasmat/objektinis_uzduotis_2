@@ -11,6 +11,25 @@
 
 using namespace std;
 
+void sort_students(vector<Student> &stud, vector<Student> &susikaupe, vector<Student> &vargseliai) {
+    auto start = std::chrono::high_resolution_clock::now();
+    for (int i = 0; i < stud.size(); i++) {
+        if (stud.at(i).final_res_med >= 5) {
+            std::swap(stud.at(i), stud.back());
+            susikaupe.push_back(std::move(stud.back()));
+            stud.pop_back();
+            i--;
+        } else {
+            std::swap(stud.at(i), stud.back());
+            vargseliai.push_back(std::move(stud.back()));
+            stud.pop_back();
+            i--;
+        }
+    }
+    std::chrono::duration<double> diff = std::chrono::high_resolution_clock::now() - start;
+    std::cout << "Studentu rusiavimas uztruko " << diff.count() << " s" << std::endl;
+}
+
 void generate_file() {
     int student_num = 0, hw_num = 0, width = 20, width_hw = 10;
     string file_name;
@@ -49,7 +68,8 @@ void generate_file() {
             break;
         }
     }
-    
+
+    auto start = std::chrono::high_resolution_clock::now();
     file << left << setw(width) << "Vardas";
     file << right << setw(width) << "Pavarde";
     for(int i = 0; i < hw_num; i++) {
@@ -65,6 +85,8 @@ void generate_file() {
         file << right << setw(width_hw) << generate_mark();
     }
     file.close();
+    std::chrono::duration<double> diff = std::chrono::high_resolution_clock::now() - start;
+    std::cout << "Failo generavimas " << diff.count() << " s" << std::endl;
 }
 
 void clear_stream() {
