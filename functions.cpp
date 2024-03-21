@@ -151,7 +151,7 @@ void avg_median_menu(bool &use_median) {
     }
 }
 
-void sort_menu(vector <Student> &students) {
+void sort_menu(vector <Student> &good, vector <Student> &bad) {
     int sort_choice;
     bool entered = false;
     while (!entered) {
@@ -162,19 +162,23 @@ void sort_menu(vector <Student> &students) {
             auto start = std::chrono::high_resolution_clock::now(); auto st = start;
             switch(sort_choice) {
                 case 1:
-                    sort(students.begin(), students.end(), compare_name);
+                    sort(good.begin(), good.end(), compare_name);
+                    sort(bad.begin(), bad.end(), compare_name);
                     entered = true;
                     break;
                 case 2:
-                    sort(students.begin(), students.end(), compare_last_name);
+                    sort(good.begin(), good.end(), compare_name);
+                    sort(bad.begin(), bad.end(), compare_name);
                     entered = true;
                     break;
                 case 3:
-                    sort(students.begin(), students.end(), compare_avg);
+                    sort(good.begin(), good.end(), compare_name);
+                    sort(bad.begin(), bad.end(), compare_name);
                     entered = true;
                     break;
                 case 4:
-                    sort(students.begin(), students.end(), compare_med);
+                    sort(good.begin(), good.end(), compare_name);
+                    sort(bad.begin(), bad.end(), compare_name);
                     entered = true;
                     break;
                 default:

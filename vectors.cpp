@@ -7,17 +7,17 @@ using namespace std;
 
 void sort_students(vector<Student> &stud, vector<Student> &susikaupe, vector<Student> &vargseliai) {
     auto start = std::chrono::high_resolution_clock::now();
-    for (int i = 0; i < stud.size(); ++i) {
+    for (int i = 0; i < stud.size(); i++) {
         if (stud.at(i).final_res_med >= 5) {
-            std::swap(stud[i], stud.back());
-            susikaupe.push_back(std::move(stud.at(i)));
+            std::swap(stud.at(i), stud.back());
+            susikaupe.push_back(std::move(stud.back()));
             stud.pop_back();
-            --i;
+            i--;
         } else {
-            std::swap(stud[i], stud.back());
+            std::swap(stud.at(i), stud.back());
             vargseliai.push_back(std::move(stud.back()));
             stud.pop_back();
-            --i;
+            i--;
         }
     }
     std::chrono::duration<double> diff = std::chrono::high_resolution_clock::now() - start;
@@ -36,8 +36,6 @@ int main() {
         int menu_choice = 5;
 
         main_menu(menu_choice, read_from_file, generate_marks, generate_names, generate_file_var);
-        output_menu(output_console);
-        clear_stream();
         srand(time(nullptr));
         if (generate_file_var) {
             generate_file();
@@ -47,8 +45,10 @@ int main() {
             } else {
                 read_data_from_console(students, use_median, generate_marks, generate_names);
             }
-            sort_menu(students);
+            output_menu(output_console);
+            clear_stream();
             sort_students(students, susikaupe, vargseliai);
+            sort_menu(susikaupe, vargseliai);
             if (output_console) {
                 avg_median_menu(use_median);
                 cout << "Vargseliai (galutinis balas < 5)" << endl;
