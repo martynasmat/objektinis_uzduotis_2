@@ -14,7 +14,7 @@ using namespace std;
 void sort_students(vector<Student> &stud, vector<Student> &susikaupe, vector<Student> &vargseliai) {
     auto start = std::chrono::high_resolution_clock::now();
     for (int i = 0; i < stud.size(); i++) {
-        if (stud.at(i).final_res_med >= 5) {
+        if (stud.at(i).get_final_res_med() >= 5) {
             std::swap(stud.at(i), stud.back());
             susikaupe.push_back(std::move(stud.back()));
             stud.pop_back();
@@ -214,20 +214,20 @@ void sort_menu(vector <Student> &good, vector <Student> &bad) {
     }
 }
 
-bool compare_name(const Student& first, const Student& second) {
-    return first.name > second.name;
+bool compare_name(Student first, Student& second) {
+    return first.get_name() > second.get_name();
 }
 
-bool compare_last_name(const Student& first, const Student& second) {
-    return first.last_name > second.last_name;
+bool compare_last_name(Student& first, Student& second) {
+    return first.get_last_name() > second.get_last_name();
 }
 
-bool compare_avg(const Student& first, const Student& second) {
-    return first.final_res_avg > second.final_res_avg;
+bool compare_avg(Student& first, Student& second) {
+    return first.get_final_res_avg() > second.get_final_res_avg();
 }
 
-bool compare_med(const Student& first, const Student& second) {
-    return first.final_res_med > second.final_res_med;
+bool compare_med(Student& first, Student& second) {
+    return first.get_final_res_med() > second.get_final_res_med();
 }
 
 string generate_surname() {
@@ -472,9 +472,9 @@ void print_data_choice(vector <Student> &stud, int num, bool use_median) {
         cout << left << setw(width) << stud.at(i).get_last_name();
         cout << left << setw(width) << stud.at(i).get_name();
         if(use_median) {
-            cout << left << setw(width) << fixed << setprecision(2) << stud.at(i).final_res_med << endl;
+            cout << left << setw(width) << fixed << setprecision(2) << stud.at(i).get_final_res_med() << endl;
         }else {
-            cout << left << setw(width) << fixed << setprecision(2) << stud.at(i).final_res_avg << endl;
+            cout << left << setw(width) << fixed << setprecision(2) << stud.at(i).get_final_res_avg() << endl;
         }
     }
 }
@@ -493,8 +493,8 @@ void print_data_file(vector <Student> &stud, int num, bool use_median, string fi
     for(int i = 0; i < num; i++) {
         file << left << setw(width) << stud.at(i).get_last_name();
         file << left << setw(width) << stud.at(i).get_name();
-        file << left << setw(width) << fixed << setprecision(2) << stud.at(i).final_res_med;
-        file << left << setw(width) << fixed << setprecision(2) << stud.at(i).final_res_avg << endl;
+        file << left << setw(width) << fixed << setprecision(2) << stud.at(i).get_final_res_med();
+        file << left << setw(width) << fixed << setprecision(2) << stud.at(i).get_final_res_avg() << endl;
     }
     file.close();
     std::chrono::duration<double> diff = std::chrono::high_resolution_clock::now() - start;

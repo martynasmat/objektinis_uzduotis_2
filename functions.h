@@ -71,7 +71,7 @@ class Student {
                 this->final_hw_avg = 0.0;
             }
         };
-        float calc_final_median_hw() {
+        void calc_final_median_hw() {
             sort(this->hw_res.begin(), this->hw_res.end());
             int vec_size = this->hw_res.size();
             int size_divided = ceil(vec_size / 2.0);
@@ -101,6 +101,12 @@ class Student {
         void set_hw(vector<int> hw) {
             this->hw_res = std::move(hw);
         };
+        float get_final_res_med() {
+            return this->final_res_med;
+        };
+        float get_final_res_avg() {
+            return this->final_res_avg;
+        };
 };
 
 void sort_students(vector<Student> &stud, vector<Student> &susikaupe, vector<Student> &vargseliai);
@@ -110,7 +116,7 @@ void main_menu(int &menu_choice, bool &read_from_file, bool &generate_marks, boo
 void output_menu(bool &output_console);
 void avg_median_menu(bool &use_median);
 void sort_menu(vector <Student> &students);
-bool compare_name(const Student& first, const Student& second);
+bool compare_name(Student first, const Student& second);
 bool compare_last_name(const Student& first, const Student& second);
 bool compare_avg(const Student& first, const Student& second);
 bool compare_med(const Student& first, const Student& second);
