@@ -55,6 +55,20 @@ class Student {
                   final_res_med(other.final_res_med), final_hw_avg(other.final_hw_avg),
                   final_hw_med(other.final_hw_med) {}
 
+        Student& operator=(const Student& other) {
+            if (this != &other) {
+                name = other.name;
+                last_name = other.last_name;
+                hw_res = other.hw_res;
+                exam_res = other.exam_res;
+                final_res_avg = other.final_res_avg;
+                final_res_med = other.final_res_med;
+                final_hw_avg = other.final_hw_avg;
+                final_hw_med = other.final_hw_med;
+            }
+            return *this;
+        }
+
         void set_full_name(string name, string last_name) {
             this->name = name;
             this->last_name = last_name;
