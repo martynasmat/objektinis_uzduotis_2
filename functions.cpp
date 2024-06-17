@@ -214,19 +214,19 @@ void sort_menu(vector <Student> &good, vector <Student> &bad) {
     }
 }
 
-bool compare_name(Student first, Student& second) {
+bool compare_name(Student first, Student second) {
     return first.get_name() > second.get_name();
 }
 
-bool compare_last_name(Student& first, Student& second) {
+bool compare_last_name(Student first, Student second) {
     return first.get_last_name() > second.get_last_name();
 }
 
-bool compare_avg(Student& first, Student& second) {
+bool compare_avg(Student first, Student second) {
     return first.get_final_res_avg() > second.get_final_res_avg();
 }
 
-bool compare_med(Student& first, Student& second) {
+bool compare_med(Student first, Student second) {
     return first.get_final_res_med() > second.get_final_res_med();
 }
 
@@ -243,22 +243,10 @@ int generate_mark() {
 }
 
 bool valid_mark(int input) {
-    try {
-        if (input < MIN_MARK) {
-            throw(0);
-        }else if(input > MAX_MARK) {
-            throw(1);
-        }
+    if (input < MIN_MARK || input > MAX_MARK) {
+        return false;
+    }else {
         return true;
-    }
-    catch (int err_num) {
-        if (err_num == 0) {
-            cout << "Bloga ivestis, pazymys turi buti lygus arba didesnis nei 2." << endl << endl;
-            return false;
-        } else if (err_num == 1) {
-            cout << "Bloga ivestis, pazymys turi buti lygus arba mazenis nei 10." << endl << endl;
-            return false;
-        }
     }
 }
 

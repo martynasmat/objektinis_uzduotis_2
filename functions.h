@@ -116,7 +116,7 @@ void main_menu(int &menu_choice, bool &read_from_file, bool &generate_marks, boo
 void output_menu(bool &output_console);
 void avg_median_menu(bool &use_median);
 void sort_menu(vector <Student> &students);
-bool compare_name(Student first, const Student& second);
+bool compare_name(Student first, Student second);
 bool compare_last_name(const Student& first, const Student& second);
 bool compare_avg(const Student& first, const Student& second);
 bool compare_med(const Student& first, const Student& second);
