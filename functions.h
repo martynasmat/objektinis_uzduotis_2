@@ -49,9 +49,8 @@ class Student {
             this->name = name;
             this->last_name = last_name;
         };
-        void set_marks(vector<int> hw_results, int exam_result) {
-            this->hw_res = hw_results;
-            this->exam_res = exam_result;
+        void enter_exam(int mark) {
+            this->exam_res = mark;
         }
         void calc_final_avg(float hw, int exam) {
             this->final_res_avg = 0.4 * hw + 0.6 * (float)exam;
@@ -93,6 +92,12 @@ class Student {
         string get_name() {
             return this->name;
         };
+        string get_last_name() {
+            return this->last_name;
+        };
+        void enter_hw(int mark) {
+            this->hw_res.push_back(mark);
+        }
 };
 
 void sort_students(vector<Student> &stud, vector<Student> &susikaupe, vector<Student> &vargseliai);
