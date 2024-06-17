@@ -45,13 +45,24 @@ class Student {
             this->hw_res = hw_results;
             this->exam_res = exam_result;
         };
+
         void set_full_name(string name, string last_name) {
             this->name = name;
             this->last_name = last_name;
         };
+
+        void set_hw(vector<int> hw) {
+            this->hw_res = std::move(hw);
+        };
+
+        void enter_hw(int mark) {
+            this->hw_res.push_back(mark);
+        };
+
         void enter_exam(int mark) {
             this->exam_res = mark;
-        }
+        };
+
         void calc_final_avg() {
             this->final_res_avg = 0.4 * this->final_hw_avg + 0.6 * (float)this->exam_res;
         };
@@ -94,12 +105,6 @@ class Student {
         };
         string get_last_name() {
             return this->last_name;
-        };
-        void enter_hw(int mark) {
-            this->hw_res.push_back(mark);
-        };
-        void set_hw(vector<int> hw) {
-            this->hw_res = std::move(hw);
         };
         float get_final_res_med() {
             return this->final_res_med;
