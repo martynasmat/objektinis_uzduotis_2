@@ -37,9 +37,9 @@ class Person {
             this->last_name = last_name;
         }
     public:
-        virtual string get_name();
-        virtual string get_last_name();
-        virtual void set_full_name(string name, string last_name);
+        virtual string get_name() = 0;
+        virtual string get_last_name() = 0;
+        virtual void set_full_name(string name, string last_name) = 0;
 };
 
 class Student : public Person {
@@ -51,7 +51,8 @@ class Student : public Person {
         float final_hw_avg = 0;
         float final_hw_med = 0;
     public:
-        Student() = default;
+        Student()
+            : Person("", "") {};
         Student(const std::string& name, const std::string& last_name, const std::vector<int>& hw_results, int exam_result)
             : Person(name, last_name), hw_res(hw_results), exam_res(exam_result) {}
 
