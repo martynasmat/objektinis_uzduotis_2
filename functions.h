@@ -9,6 +9,7 @@
 #include <cctype>
 #include <fstream>
 #include <chrono>
+#include <utility>
 
 using namespace std;
 
@@ -45,6 +46,10 @@ class Student {
             this->hw_res = hw_results;
             this->exam_res = exam_result;
         };
+
+        ~Student() = default;
+
+
 
         void set_full_name(string name, string last_name) {
             this->name = name;
