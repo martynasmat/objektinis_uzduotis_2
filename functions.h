@@ -28,21 +28,65 @@ struct Vector {
 };
 
 class Student {
-public:
-    string name;
-    string last_name;
-    vector <int> hw_res;
-    int exam_res = 0;
-    float final_res_avg = 0;
-    float final_res_med = 0;
-    float final_hw_avg = 0;
-    float final_hw_med = 0;
-    Student(string name, string last_name, vector<int> hw_results, int exam_result) {
-        this->name = name;
-        this->last_name = last_name;
-        this->hw_res = hw_results;
-        this->exam_res = exam_result;
-    };
+    private:
+        string name;
+        string last_name;
+        vector <int> hw_res;
+        int exam_res = 0;
+        float final_res_avg = 0;
+        float final_res_med = 0;
+        float final_hw_avg = 0;
+        float final_hw_med = 0;
+    public:
+        Student() = default;
+        Student(string name, string last_name, vector<int> hw_results, int exam_result) {
+            this->name = name;
+            this->last_name = last_name;
+            this->hw_res = hw_results;
+            this->exam_res = exam_result;
+        };
+        void set_full_name(string name, string last_name) {
+            this->name = name;
+            this->last_name = last_name;
+        };
+        void set_
+        void calc_final_avg(float hw, int exam) {
+            this->final_res_avg = 0.4 * hw + 0.6 * (float)exam;
+        };
+        void calc_final_med(float hw, int exam) {
+            this->final_res_med = 0.4 * hw + 0.6 * (float)exam;
+        };
+        void calc_final_average_hw(vector <int> &res) {
+            int vec_size = res.size();
+            int sum = 0;
+            for(int i = 0; i < vec_size; i++) {
+                sum += res.at(i);
+            }
+
+            if(vec_size > 0) {
+                this->final_hw_avg = (float)sum / (float)vec_size;
+            }else {
+                this->final_hw_avg = 0.0;
+            }
+        };
+        float calc_final_median_hw(vector <int> &res) {
+            sort(res.begin(), res.end());
+            int vec_size = res.size();
+            int size_divided = ceil(vec_size / 2.0);
+
+            // If there are no entries, median = 0.0
+            if(vec_size > 0) {
+                if (vec_size % 2 == 0) {
+                    // If number of entries is even, median is calculated by taking the average of the 2 middle numbers.
+                    this->final_hw_med = (float)(res.at(size_divided - 1) + res.at(size_divided)) / 2.0;
+                } else {
+                    // If number of entries is odd, median is the middle entry.
+                    this->final_hw_avg = (float)res.at(size_divided - 1);
+                }
+            }else {
+                this->final_hw_avg = 0.0;
+            }
+        }
 };
 
 void sort_students(vector<Student> &stud, vector<Student> &susikaupe, vector<Student> &vargseliai);

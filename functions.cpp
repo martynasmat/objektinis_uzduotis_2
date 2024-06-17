@@ -301,18 +301,22 @@ void read_data_from_file(const string& file_name, vector <Student> &stud) {
                 first_line = false;
             } else {
                 Student student;
-                file >> student.name >> student.last_name;
+                string name, last_name;
+                vector<int> hw_res;
+                file >> name >> last_name;
+                student.set_full_name(name, last_name);
                 while (file.peek() == 32) {
                     file >> mark;
-                    student.hw_res.push_back(mark);
+                    hw_res.push_back(mark);
                 };
 
-                student.exam_res = student.hw_res.back();
-                student.hw_res.pop_back();
-                student.final_hw_avg = average(student.hw_res);
-                student.final_hw_med = median(student.hw_res);
-                student.final_res_avg = final(student.final_hw_avg, student.exam_res);
-                student.final_res_med = final(student.final_hw_med, student.exam_res);
+                student.enter_exam(hw_res.back());
+                hw_res.pop_back();
+                student.set_hw(hw_res);
+                student.calc_final_average_hw();
+                student.calc_final_median_hw();
+                student.calc_final_avg();
+                student.calc_final_med();
                 stud.push_back(student);
             }
         }
@@ -342,13 +346,14 @@ void read_data_from_console(vector <Student> &stud, bool use_median, bool gen_ma
             string surname = generate_surname();
             cout << "Sugeneruotas vardas: " << name << endl;
             cout << "Sugeneruota pavarde: " << surname << endl;
-            stud_var.name = name;
-            stud_var.last_name = surname;
+            stud_var.set_full_name(name, surname);
         }else {
+            string name;
+            string last_name;
             while (!entered) {
                 cout << "Vardas (maks. 20 simboliu):";
-                getline(cin, stud_var.name);
-                if (valid_alphabet(stud_var.name)) {
+                getline(cin, name);
+                if (valid_alphabet(name)) {
                     entered = true;
                 }
             }
@@ -356,11 +361,13 @@ void read_data_from_console(vector <Student> &stud, bool use_median, bool gen_ma
             entered = false;
             while (!entered) {
                 cout << "Pavarde (maks. 20 simboliu):";
-                getline(cin, stud_var.last_name);
-                if (valid_alphabet(stud_var.last_name)) {
+                getline(cin, last_name);
+                if (valid_alphabet(last_name)) {
                     entered = true;
                 }
             }
+
+            stud_var.set_full_name(name, last_name);
         }
 
         do {
@@ -374,7 +381,7 @@ void read_data_from_console(vector <Student> &stud, bool use_median, bool gen_ma
                 } else if (response == "y") {
                     if (gen_marks) {
                         mark = generate_mark();
-                        stud_var.hw_res.push_back(mark);
+                        stud_var.enter_hw(mark);
                         cout << "Sugeneruotas pazymys: " << mark << endl;
                         entered = true;
                         do_continue_inner = true;
@@ -383,10 +390,10 @@ void read_data_from_console(vector <Student> &stud, bool use_median, bool gen_ma
                         do_continue_inner = true;
                         entered_inner = false;
                         while (!entered_inner) {
-                            cout << "Namu darbo nr. " << stud_var.hw_res.size() + 1 << " rezultatas:";
+                            cout << "Namu darbo rezultatas:";
                             if (cin >> hw) {
                                 if (valid_mark(hw)) {
-                                    stud_var.hw_res.push_back(hw);
+                                    stud_var.enter_hw(hw);
                                     entered_inner = true;
                                 }
                             } else {
@@ -406,13 +413,15 @@ void read_data_from_console(vector <Student> &stud, bool use_median, bool gen_ma
         entered = false;
         if (gen_marks) {
             mark = generate_mark();
-            stud_var.exam_res = mark;
+            stud_var.enter_exam(mark);
             cout << "Sugeneruotas egzamino rezultatas: " << mark << endl << endl;
         } else {
             while (!entered) {
                 cout << "Egzamino rezultatas:";
-                if (cin >> stud_var.exam_res) {
-                    if (valid_mark(stud_var.exam_res)) {
+                int exam_res;
+                if (cin >> exam_res) {
+                    if (valid_mark(exam_res)) {
+                        stud_var.enter_exam(mark);
                         entered = true;
                     }
                 } else {
@@ -422,11 +431,11 @@ void read_data_from_console(vector <Student> &stud, bool use_median, bool gen_ma
             }
         }
 
-        stud_var.final_hw_med = median(stud_var.hw_res);
-        stud_var.final_hw_avg = average(stud_var.hw_res);
+        stud_var.calc_final_median_hw();
+        stud_var.calc_final_average_hw();
 
-        stud_var.final_res_avg = final(stud_var.final_hw_avg, stud_var.exam_res);
-        stud_var.final_res_med = final(stud_var.final_hw_med, stud_var.exam_res);
+        stud_var.calc_final_avg();
+        stud_var.calc_final_med();
         stud.push_back(stud_var);
         cout << endl;
 
@@ -450,45 +459,6 @@ void read_data_from_console(vector <Student> &stud, bool use_median, bool gen_ma
     }while(do_continue);
 }
 
-float average(vector <int> &res) {
-    int vec_size = res.size();
-    int sum = 0;
-    for(int i = 0; i < vec_size; i++) {
-        sum += res.at(i);
-    }
-
-    if(vec_size > 0) {
-        return (float)sum / (float)vec_size;
-    }else {
-        return 0.0;
-    }
-}
-
-float median(vector <int> &res) {
-    sort(res.begin(), res.end());
-    int vec_size = res.size();
-    int size_divided = ceil(vec_size / 2.0);
-
-    // If there are no entries, median = 0.0
-    if(vec_size > 0) {
-        if (vec_size % 2 == 0) {
-            // If number of entries is even, median is calculated by taking the average of the 2 middle numbers.
-            return (float)(res.at(size_divided - 1) + res.at(size_divided)) / 2.0;
-        } else {
-            // If number of entries is odd, median is the middle entry.
-            return (float)res.at(size_divided - 1);
-        }
-    }else {
-        return 0.0;
-    }
-}
-
-float final(float hw, int exam) {
-    // Final grade is calculated with the following formula:
-    // 0.4 * (average / median homework mark) + 0.6 * (exam mark)
-    return 0.4 * hw + 0.6 * (float)exam;
-}
-
 void print_data_choice(vector <Student> &stud, int num, bool use_median) {
     // Different output for average and median
     string galutinis = use_median ? "Galutinis (med.)" : "Galutinis (vid.)";
@@ -499,8 +469,8 @@ void print_data_choice(vector <Student> &stud, int num, bool use_median) {
     cout << left << setw(width) << galutinis << endl;
     cout << "------------------------------------------------------------" << endl;
     for(int i = 0; i < num; i++) {
-        cout << left << setw(width) << stud.at(i).last_name;
-        cout << left << setw(width) << stud.at(i).name;
+        cout << left << setw(width) << stud.at(i).get_last_name();
+        cout << left << setw(width) << stud.at(i).get_name();
         if(use_median) {
             cout << left << setw(width) << fixed << setprecision(2) << stud.at(i).final_res_med << endl;
         }else {
@@ -521,8 +491,8 @@ void print_data_file(vector <Student> &stud, int num, bool use_median, string fi
     file << left << setw(width) << "Galutinis (vid.)" << endl;
     file << "----------------------------------------------------------------------------------" << endl;
     for(int i = 0; i < num; i++) {
-        file << left << setw(width) << stud.at(i).last_name;
-        file << left << setw(width) << stud.at(i).name;
+        file << left << setw(width) << stud.at(i).get_last_name();
+        file << left << setw(width) << stud.at(i).get_name();
         file << left << setw(width) << fixed << setprecision(2) << stud.at(i).final_res_med;
         file << left << setw(width) << fixed << setprecision(2) << stud.at(i).final_res_avg << endl;
     }
