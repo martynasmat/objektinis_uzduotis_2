@@ -20,11 +20,29 @@ const int NAME_COUNT = 10;
 const vector <string> NAMES = {"Dominykas", "Lukas", "Matas", "Benas", "Augustas", "Martynas", "Jonas", "Ignas", "Emilis", "Adomas"};
 const vector <string> SURNAMES = {"Kazlauskas", "Petrauskas", "Jankauskas", "Butkus", "Paulauskas", "Vasiliauskas", "Baranauskas", "Urbonas", "Navickas", "Ramanauskas"};
 
-struct Student {
+struct Vector {
     string name, last_name;
     vector <int> hw_res;
     int exam_res = 0;
     float final_res_avg = 0, final_res_med = 0, final_hw_avg = 0, final_hw_med = 0;
+};
+
+class Student {
+public:
+    string name;
+    string last_name;
+    vector <int> hw_res;
+    int exam_res = 0;
+    float final_res_avg = 0;
+    float final_res_med = 0;
+    float final_hw_avg = 0;
+    float final_hw_med = 0;
+    Student(string name, string last_name, vector<int> hw_results, int exam_result) {
+        this->name = name;
+        this->last_name = last_name;
+        this->hw_res = hw_results;
+        this->exam_res = exam_result;
+    };
 };
 
 void sort_students(vector<Student> &stud, vector<Student> &susikaupe, vector<Student> &vargseliai);
