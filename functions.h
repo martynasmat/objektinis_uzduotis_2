@@ -70,7 +70,7 @@ class Student : public Person {
         ~Student() = default;
 
         Student(const Student& other)
-                : name(other.name), last_name(other.last_name), hw_res(other.hw_res),
+                : hw_res(other.hw_res),
                   exam_res(other.exam_res), final_res_avg(other.final_res_avg),
                   final_res_med(other.final_res_med), final_hw_avg(other.final_hw_avg),
                   final_hw_med(other.final_hw_med) {}
@@ -90,8 +90,7 @@ class Student : public Person {
         }
 
         Student(Student&& other) noexcept
-                : name(std::move(other.name)), last_name(std::move(other.last_name)),
-                  hw_res(std::move(other.hw_res)), exam_res(other.exam_res),
+                : hw_res(std::move(other.hw_res)), exam_res(other.exam_res),
                   final_res_avg(other.final_res_avg), final_res_med(other.final_res_med),
                   final_hw_avg(other.final_hw_avg), final_hw_med(other.final_hw_med) {
             other.exam_res = 0;
@@ -141,7 +140,6 @@ class Student : public Person {
         };
         void calc_final_average_hw();
         void calc_final_median_hw();
-        string get_name() {
 
         float get_final_res_med() {
             return this->final_res_med;
