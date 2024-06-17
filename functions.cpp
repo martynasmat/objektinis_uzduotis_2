@@ -189,18 +189,18 @@ void sort_menu(vector <Student> &good, vector <Student> &bad) {
                     entered = true;
                     break;
                 case 2:
-                    sort(good.begin(), good.end(), compare_name);
-                    sort(bad.begin(), bad.end(), compare_name);
+                    sort(good.begin(), good.end(), compare_last_name);
+                    sort(bad.begin(), bad.end(), compare_last_name);
                     entered = true;
                     break;
                 case 3:
-                    sort(good.begin(), good.end(), compare_name);
-                    sort(bad.begin(), bad.end(), compare_name);
+                    sort(good.begin(), good.end(), compare_avg);
+                    sort(bad.begin(), bad.end(), compare_avg);
                     entered = true;
                     break;
                 case 4:
-                    sort(good.begin(), good.end(), compare_name);
-                    sort(bad.begin(), bad.end(), compare_name);
+                    sort(good.begin(), good.end(), compare_med);
+                    sort(bad.begin(), bad.end(), compare_med);
                     entered = true;
                     break;
                 default:
