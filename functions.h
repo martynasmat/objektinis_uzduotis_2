@@ -52,8 +52,6 @@ class Person {
 
 class Student : public Person {
     private:
-        string name;
-        string last_name;
         vector <int> hw_res;
         int exam_res = 0;
         float final_res_avg = 0;
@@ -123,11 +121,6 @@ class Student : public Person {
             return *this;
         }
 
-        void set_full_name(string name, string last_name) {
-            this->name = name;
-            this->last_name = last_name;
-        };
-
         void set_hw(vector<int> hw) {
             this->hw_res = std::move(hw);
         };
@@ -149,11 +142,7 @@ class Student : public Person {
         void calc_final_average_hw();
         void calc_final_median_hw();
         string get_name() {
-            return this->name;
-        };
-        string get_last_name() {
-            return this->last_name;
-        };
+
         float get_final_res_med() {
             return this->final_res_med;
         };
