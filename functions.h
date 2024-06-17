@@ -29,9 +29,21 @@ struct Vector {
 };
 
 class Person {
-protected:
-    string name;
-    string last_name;
+    protected:
+        string name;
+        string last_name;
+    public:
+        Person() = default;
+        Person(string name, string last_name) {
+            this->name = name;
+            this->last_name = last_name;
+        };
+        string get_name() {
+            return this->name;
+        }
+        string get_last_name() {
+            return this->last_name;
+        }
 };
 
 class Student {
