@@ -44,9 +44,13 @@ class Person {
         string get_last_name() {
             return this->last_name;
         }
+        string set_full_name(string name, string last_name) {
+            this->name = name;
+            this->last_name = last_name;
+        }
 };
 
-class Student {
+class Student : public Person {
     private:
         string name;
         string last_name;
