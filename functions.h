@@ -69,6 +69,38 @@ class Student {
             return *this;
         }
 
+        Student(Student&& other) noexcept
+                : name(std::move(other.name)), last_name(std::move(other.last_name)),
+                  hw_res(std::move(other.hw_res)), exam_res(other.exam_res),
+                  final_res_avg(other.final_res_avg), final_res_med(other.final_res_med),
+                  final_hw_avg(other.final_hw_avg), final_hw_med(other.final_hw_med) {
+            other.exam_res = 0;
+            other.final_res_avg = 0;
+            other.final_res_med = 0;
+            other.final_hw_avg = 0;
+            other.final_hw_med = 0;
+        }
+
+        Student& operator=(Student&& other) noexcept {
+            if (this != &other) {
+                name = std::move(other.name);
+                last_name = std::move(other.last_name);
+                hw_res = std::move(other.hw_res);
+                exam_res = other.exam_res;
+                final_res_avg = other.final_res_avg;
+                final_res_med = other.final_res_med;
+                final_hw_avg = other.final_hw_avg;
+                final_hw_med = other.final_hw_med;
+
+                other.exam_res = 0;
+                other.final_res_avg = 0;
+                other.final_res_med = 0;
+                other.final_hw_avg = 0;
+                other.final_hw_med = 0;
+            }
+            return *this;
+        }
+
         void set_full_name(string name, string last_name) {
             this->name = name;
             this->last_name = last_name;
