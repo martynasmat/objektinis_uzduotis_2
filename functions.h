@@ -52,17 +52,17 @@ class Student {
         void enter_exam(int mark) {
             this->exam_res = mark;
         }
-        void calc_final_avg(float hw, int exam) {
-            this->final_res_avg = 0.4 * hw + 0.6 * (float)exam;
+        void calc_final_avg() {
+            this->final_res_avg = 0.4 * this->final_hw_avg + 0.6 * (float)this->exam_res;
         };
-        void calc_final_med(float hw, int exam) {
-            this->final_res_med = 0.4 * hw + 0.6 * (float)exam;
+        void calc_final_med() {
+            this->final_res_med = 0.4 * this->final_hw_med + 0.6 * (float)this->exam_res;
         };
-        void calc_final_average_hw(vector <int> &res) {
-            int vec_size = res.size();
+        void calc_final_average_hw() {
+            int vec_size = this->hw_res.size();
             int sum = 0;
             for(int i = 0; i < vec_size; i++) {
-                sum += res.at(i);
+                sum += this->hw_res.at(i);
             }
 
             if(vec_size > 0) {
@@ -71,19 +71,19 @@ class Student {
                 this->final_hw_avg = 0.0;
             }
         };
-        float calc_final_median_hw(vector <int> &res) {
-            sort(res.begin(), res.end());
-            int vec_size = res.size();
+        float calc_final_median_hw() {
+            sort(this->hw_res.begin(), this->hw_res.end());
+            int vec_size = this->hw_res.size();
             int size_divided = ceil(vec_size / 2.0);
 
             // If there are no entries, median = 0.0
             if(vec_size > 0) {
                 if (vec_size % 2 == 0) {
                     // If number of entries is even, median is calculated by taking the average of the 2 middle numbers.
-                    this->final_hw_med = (float)(res.at(size_divided - 1) + res.at(size_divided)) / 2.0;
+                    this->final_hw_med = (float)(this->hw_res.at(size_divided - 1) + this->hw_res.at(size_divided)) / 2.0;
                 } else {
                     // If number of entries is odd, median is the middle entry.
-                    this->final_hw_avg = (float)res.at(size_divided - 1);
+                    this->final_hw_avg = (float)this->hw_res.at(size_divided - 1);
                 }
             }else {
                 this->final_hw_avg = 0.0;
@@ -97,7 +97,10 @@ class Student {
         };
         void enter_hw(int mark) {
             this->hw_res.push_back(mark);
-        }
+        };
+        void set_hw(vector<int> hw) {
+            this->hw_res = std::move(hw);
+        };
 };
 
 void sort_students(vector<Student> &stud, vector<Student> &susikaupe, vector<Student> &vargseliai);
