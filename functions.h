@@ -69,37 +69,8 @@ class Student {
         void calc_final_med() {
             this->final_res_med = 0.4 * this->final_hw_med + 0.6 * (float)this->exam_res;
         };
-        void calc_final_average_hw() {
-            int vec_size = this->hw_res.size();
-            int sum = 0;
-            for(int i = 0; i < vec_size; i++) {
-                sum += this->hw_res.at(i);
-            }
-
-            if(vec_size > 0) {
-                this->final_hw_avg = (float)sum / (float)vec_size;
-            }else {
-                this->final_hw_avg = 0.0;
-            }
-        };
-        void calc_final_median_hw() {
-            sort(this->hw_res.begin(), this->hw_res.end());
-            int vec_size = this->hw_res.size();
-            int size_divided = ceil(vec_size / 2.0);
-
-            // If there are no entries, median = 0.0
-            if(vec_size > 0) {
-                if (vec_size % 2 == 0) {
-                    // If number of entries is even, median is calculated by taking the average of the 2 middle numbers.
-                    this->final_hw_med = (float)(this->hw_res.at(size_divided - 1) + this->hw_res.at(size_divided)) / 2.0;
-                } else {
-                    // If number of entries is odd, median is the middle entry.
-                    this->final_hw_avg = (float)this->hw_res.at(size_divided - 1);
-                }
-            }else {
-                this->final_hw_avg = 0.0;
-            }
-        };
+        void calc_final_average_hw();
+        void calc_final_median_hw();
         string get_name() {
             return this->name;
         };
@@ -114,6 +85,38 @@ class Student {
         };
 };
 
+void Student::calc_final_average_hw() {
+    int vec_size = this->hw_res.size();
+    int sum = 0;
+    for(int i = 0; i < vec_size; i++) {
+        sum += this->hw_res.at(i);
+    }
+
+    if(vec_size > 0) {
+        this->final_hw_avg = (float)sum / (float)vec_size;
+    }else {
+        this->final_hw_avg = 0.0;
+    }
+}
+
+void Student::calc_final_median_hw() {
+    sort(this->hw_res.begin(), this->hw_res.end());
+    int vec_size = this->hw_res.size();
+    int size_divided = ceil(vec_size / 2.0);
+
+    // If there are no entries, median = 0.0
+    if(vec_size > 0) {
+        if (vec_size % 2 == 0) {
+            // If number of entries is even, median is calculated by taking the average of the 2 middle numbers.
+            this->final_hw_med = (float)(this->hw_res.at(size_divided - 1) + this->hw_res.at(size_divided)) / 2.0;
+        } else {
+            // If number of entries is odd, median is the middle entry.
+            this->final_hw_avg = (float)this->hw_res.at(size_divided - 1);
+        }
+    }else {
+        this->final_hw_avg = 0.0;
+    }
+}
 void sort_students(vector<Student> &stud, vector<Student> &susikaupe, vector<Student> &vargseliai);
 void generate_file();
 void clear_stream();
