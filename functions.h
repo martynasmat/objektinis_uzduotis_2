@@ -28,6 +28,12 @@ struct Vector {
     float final_res_avg = 0, final_res_med = 0, final_hw_avg = 0, final_hw_med = 0;
 };
 
+class Person {
+protected:
+    string name;
+    string last_name;
+};
+
 class Student {
     private:
         string name;
