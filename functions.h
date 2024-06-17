@@ -32,22 +32,14 @@ class Person {
     protected:
         string name;
         string last_name;
+        Person(const std::string& name, const std::string& last_name) {
+            this->name = name;
+            this->last_name = last_name;
+        }
     public:
-        Person() = default;
-        Person(string name, string last_name) {
-            this->name = name;
-            this->last_name = last_name;
-        };
-        string get_name() {
-            return this->name;
-        }
-        string get_last_name() {
-            return this->last_name;
-        }
-        string set_full_name(string name, string last_name) {
-            this->name = name;
-            this->last_name = last_name;
-        }
+        virtual string get_name();
+        virtual string get_last_name();
+        virtual void set_full_name(string name, string last_name);
 };
 
 class Student : public Person {
@@ -60,23 +52,21 @@ class Student : public Person {
         float final_hw_med = 0;
     public:
         Student() = default;
-        Student(string name, string last_name, vector<int> hw_results, int exam_result) {
-            this->name = name;
-            this->last_name = last_name;
-            this->hw_res = hw_results;
-            this->exam_res = exam_result;
-        };
+        Student(const std::string& name, const std::string& last_name, const std::vector<int>& hw_results, int exam_result)
+            : Person(name, last_name), hw_res(hw_results), exam_res(exam_result) {}
 
         ~Student() = default;
 
         Student(const Student& other)
-                : hw_res(other.hw_res),
+                : Person(other),
+                  hw_res(other.hw_res),
                   exam_res(other.exam_res), final_res_avg(other.final_res_avg),
                   final_res_med(other.final_res_med), final_hw_avg(other.final_hw_avg),
                   final_hw_med(other.final_hw_med) {}
 
         Student& operator=(const Student& other) {
             if (this != &other) {
+                Person::operator=(std::move(other));
                 name = other.name;
                 last_name = other.last_name;
                 hw_res = other.hw_res;
@@ -89,8 +79,8 @@ class Student : public Person {
             return *this;
         }
 
-        Student(Student&& other) noexcept
-                : hw_res(std::move(other.hw_res)), exam_res(other.exam_res),
+        Student(const string &name, const string &lastName, Student &&other) noexcept
+                : Person(name, lastName), hw_res(std::move(other.hw_res)), exam_res(other.exam_res),
                   final_res_avg(other.final_res_avg), final_res_med(other.final_res_med),
                   final_hw_avg(other.final_hw_avg), final_hw_med(other.final_hw_med) {
             other.exam_res = 0;
@@ -147,6 +137,16 @@ class Student : public Person {
         float get_final_res_avg() {
             return this->final_res_avg;
         };
+        string get_name() {
+            return this->name;
+        }
+        string get_last_name() {
+            return this->last_name;
+        }
+        void set_full_name(string name, string last_name) {
+            this->name = name;
+            this->last_name = last_name;
+        }
 };
 
 void Student::calc_final_average_hw() {
